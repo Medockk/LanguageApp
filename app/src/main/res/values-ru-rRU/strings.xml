@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LanguageApp</string>
+    <string name="Hello">Привет</string>
+    <string name="Error">Ошибка</string>
+    <string name="Next">Дальше</string>
+    <string name="More">Больше</string>
+    <string name="Choose_a_language">Выбрать язык</string>
+</resources>

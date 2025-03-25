@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LanguageApp</string>
+    <string name="Hello">Hello</string>
+    <string name="Error">Error</string>
+    <string name="Next">Next</string>
+    <string name="More">More</string>
+    <string name="Choose_a_language">Choose a language</string>
 </resources>

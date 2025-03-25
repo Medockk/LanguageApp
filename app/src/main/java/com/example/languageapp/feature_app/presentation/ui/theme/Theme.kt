@@ -1,6 +1,5 @@
-package com.example.languageapp.ui.theme
+package com.example.languageapp.feature_app.presentation.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,19 +12,35 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = primaryDarkColor,
+    primary = primaryColor,
+    onPrimary = onPrimaryDarkColor,
+
     secondary = secondaryColor,
-    tertiary = Color.Black,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
+    onSecondary = onSecondaryColor,
+
+    tertiaryContainer = _FFFFFF4D,
+    onTertiary = onTertiaryDarkColor,
+
+    errorContainer = primaryColor,
+    onError = Color.White,
+
+    background = backgroundDark,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = primaryLightColor,
+    primary = primaryColor,
+    onPrimary = onPrimaryLightColor,
+
     secondary = secondaryColor,
-    tertiary = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
+    onSecondary = onSecondaryColor,
+
+    tertiaryContainer = _080E1E33,
+    onTertiary = onTertiaryLightColor,
+
+    errorContainer = Color.White,
+    onError = primaryColor,
+
+    background = backgroundLight
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
