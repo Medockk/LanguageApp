@@ -1,6 +1,7 @@
 package com.example.languageapp.feature_app.presentation.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -39,6 +40,26 @@ val Typography = Typography(
         fontSize = 36.sp,
         textAlign = TextAlign.Center
 
+    ),
+    titleMedium = TextStyle(
+        fontFamily = fontFredokaMedium,
+        fontWeight = FontWeight(500),
+        fontSize = 22.sp,
+        textAlign = TextAlign.Center,
+        color = Color.White
+    ),
+    displaySmall = TextStyle(
+        fontFamily = fontFredokaRegular,
+        fontWeight = FontWeight(400),
+        fontSize = 15.sp,
+        textAlign = TextAlign.Center,
+        color = textFieldHintColor
+    ),
+    displayMedium = TextStyle(
+        fontFamily = fontFredokaRegular,
+        fontWeight = FontWeight(400),
+        fontSize = 16.sp,
+        textAlign = TextAlign.Start
     )
     /* Other default text styles to override
     titleLarge = TextStyle(

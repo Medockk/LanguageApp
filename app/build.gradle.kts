@@ -77,8 +77,9 @@ dependencies {
     implementation(libs.hilt.navigation)
 
     //tensorLite
-    implementation(libs.tensor.lite)
+    //implementation(libs.tensor.lite)
 
+    //implementation(libs.androidx.statusbar)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

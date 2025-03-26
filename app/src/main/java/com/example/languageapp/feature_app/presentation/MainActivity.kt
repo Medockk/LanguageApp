@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
@@ -12,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.languageapp.feature_app.presentation.Login.LoginScreen
 import com.example.languageapp.feature_app.presentation.OnBoard.OnBoardScreen
+import com.example.languageapp.feature_app.presentation.SignUp.SignUpScreen
 import com.example.languageapp.feature_app.presentation.Splash.SplashScreen
 import com.example.languageapp.feature_app.presentation.ui.theme.LanguageAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,10 +43,10 @@ class MainActivity : ComponentActivity() {
                         navController,
                         startDestination = Route.SplashScreen.route,
                         enterTransition = {
-                            fadeIn()
+                            fadeIn(tween(500))
                         },
                         exitTransition = {
-                            fadeOut()
+                            fadeOut(tween(500))
                         },
                         modifier = Modifier
                             .padding(it)
@@ -53,6 +56,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.OnBoardScreen.route) {
                             OnBoardScreen(navController)
+                        }
+                        composable(Route.LoginScreen.route) {
+                            LoginScreen(navController)
+                        }
+                        composable(Route.SignUpScreen.route) {
+                            SignUpScreen(navController)
                         }
                     }
                 }
