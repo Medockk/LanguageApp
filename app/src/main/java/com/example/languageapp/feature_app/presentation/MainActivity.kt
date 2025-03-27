@@ -7,17 +7,30 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.languageapp.feature_app.presentation.LanguageSelect.LanguageSelectScreen
 import com.example.languageapp.feature_app.presentation.Login.LoginScreen
+import com.example.languageapp.feature_app.presentation.MainScreen.MainScreen
+import com.example.languageapp.feature_app.presentation.NoConnection.NoConnectionScreen
 import com.example.languageapp.feature_app.presentation.OnBoard.OnBoardScreen
+import com.example.languageapp.feature_app.presentation.Profile.ProfileScreen
+import com.example.languageapp.feature_app.presentation.ProfileResizePhoto.ProfileResizePhotoScreen
 import com.example.languageapp.feature_app.presentation.SignUp.SignUpScreen
 import com.example.languageapp.feature_app.presentation.Splash.SplashScreen
+import com.example.languageapp.feature_app.presentation.WordPractice.WordPracticeScreen
 import com.example.languageapp.feature_app.presentation.ui.theme.LanguageAppTheme
+import com.example.languageapp.feature_app.presentation.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,9 +47,13 @@ class MainActivity : ComponentActivity() {
 //            Log.e("exception", e.message.toString())
 //        }
         setContent {
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+            this.window.statusBarColor = primaryColor.toArgb()
             val navController = rememberNavController()
+            var darkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
             LanguageAppTheme(
-                dynamicColor = false
+                dynamicColor = false,
+                darkTheme = darkTheme
             ) {
                 Scaffold {
                     NavHost(
@@ -62,6 +79,26 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.SignUpScreen.route) {
                             SignUpScreen(navController)
+                        }
+                        composable(Route.NoConnectionScreen.route) {
+                            NoConnectionScreen(navController)
+                        }
+                        composable(Route.LanguageSelectScreen.route) {
+                            LanguageSelectScreen(navController)
+                        }
+                        composable(Route.MainScreen.route) {
+                            MainScreen(navController)
+                        }
+                        composable(Route.ProfileScreen.route) {
+                            ProfileScreen(navController){
+                                darkTheme = !darkTheme
+                            }
+                        }
+                        composable(Route.ProfileResizePhotoScreen.route){
+                            ProfileResizePhotoScreen(navController)
+                        }
+                        composable(Route.WordPractice.route){
+                            WordPracticeScreen(navController)
                         }
                     }
                 }

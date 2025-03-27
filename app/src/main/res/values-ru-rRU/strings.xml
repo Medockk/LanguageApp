@@ -16,4 +16,6 @@
     <string name="email">Почта</string>
     <string name="password">Пароль</string>
     <string name="confirm_password">Подтвердить пароль</string>
+    <string name="what_is_your_mother_language">Какой ваш родной язык?</string>
+    <string name="points">очков</string>
 </resources>

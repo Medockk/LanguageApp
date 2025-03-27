@@ -35,8 +35,8 @@ import com.example.languageapp.feature_app.presentation.common.CustomButton
 import com.example.languageapp.feature_app.presentation.common.CustomScaffold
 import com.example.languageapp.feature_app.presentation.common.CustomScaffoldTextAlign
 import com.example.languageapp.feature_app.presentation.common.CustomTextField
+import com.example.languageapp.feature_app.presentation.ui.theme._5B7BFEFF
 import com.example.languageapp.feature_app.presentation.ui.theme._656872
-import com.example.languageapp.feature_app.presentation.ui.theme.checkboxColor
 import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedium
 import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaRegular
 
@@ -95,7 +95,11 @@ fun SignUpScreen(
 
     LaunchedEffect(!state.isComplete) {
         if (state.isComplete) {
-
+            navController.navigate(Route.LanguageSelectScreen.route){
+                popUpTo(Route.SignUpScreen.route){
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -197,7 +201,7 @@ fun SignUpScreen(
                                 }
                                 withStyle(
                                     SpanStyle(
-                                        color = checkboxColor,
+                                        color = _5B7BFEFF,
                                         fontFamily = fontFredokaRegular,
                                         fontWeight = FontWeight(400),
                                         fontSize = 17.sp
@@ -234,7 +238,11 @@ fun SignUpScreen(
 
         TextButton(
             onClick = {
-                navController.navigate(Route.LoginScreen.route)
+                navController.navigate(Route.LoginScreen.route){
+                    popUpTo(Route.SignUpScreen.route){
+                        inclusive = true
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth(),

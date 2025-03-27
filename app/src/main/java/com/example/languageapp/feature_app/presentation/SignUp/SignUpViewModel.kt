@@ -1,9 +1,6 @@
 package com.example.languageapp.feature_app.presentation.SignUp
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,25 +15,6 @@ class SignUpViewModel @Inject constructor(
 
     private val _state = mutableStateOf(SignUpState())
     val state: State<SignUpState> = _state
-
-    init {
-        test()
-    }
-
-    fun test() {
-        Thread{
-            while (true){
-                with(context) {
-                    val manager = getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-                    val network = manager.allNetworks.any {
-                        manager.getNetworkCapabilities(it)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
-                        manager.getNetworkCapabilities(it)?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) ?: false
-                    }
-                    Log.e("callback", network.toString())
-                }
-            }
-        }.start()
-    }
 
     fun onEvent(event: SignUpEvent){
         when (event){
@@ -85,7 +63,11 @@ class SignUpViewModel @Inject constructor(
                     password = event.value
                 )
             }
-            SignUpEvent.SignUpClick -> TODO()
+            SignUpEvent.SignUpClick -> {
+                _state.value = state.value.copy(
+                    isComplete = true
+                )
+            }
             SignUpEvent.ResetException -> {
                 _state.value = state.value.copy(
                     exception = ""

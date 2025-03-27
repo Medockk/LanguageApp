@@ -3,6 +3,7 @@
 package com.example.languageapp.feature_app.presentation.Login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -134,7 +135,15 @@ fun LoginScreen(
                 fontFamily = fontFredokaRegular,
                 fontWeight = FontWeight(400),
                 fontSize = 15.sp,
-                color = MaterialTheme.colorScheme.onError
+                color = MaterialTheme.colorScheme.onError,
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(Route.NoConnectionScreen.route) {
+                            popUpTo(Route.LoginScreen.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
             )
             Spacer(Modifier.height(30.dp))
             CustomButton(
@@ -148,7 +157,11 @@ fun LoginScreen(
             Spacer(Modifier.height(25.dp))
             TextButton(
                 onClick = {
-                    navController.navigate(Route.SignUpScreen.route)
+                    navController.navigate(Route.SignUpScreen.route){
+                        popUpTo(Route.LoginScreen.route){
+                            inclusive = true
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(),

@@ -5,7 +5,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.languageapp.feature_app.presentation.ui.theme.checkboxColor
+import com.example.languageapp.feature_app.presentation.ui.theme._5B7BFEFF
 
 @Composable
 fun CustomCheckBox(
@@ -19,7 +19,7 @@ fun CustomCheckBox(
         modifier = modifier,
         colors = CheckboxDefaults.colors(
             checkmarkColor = Color.White,
-            checkedColor = checkboxColor,
+            checkedColor = _5B7BFEFF,
         )
     )
 }

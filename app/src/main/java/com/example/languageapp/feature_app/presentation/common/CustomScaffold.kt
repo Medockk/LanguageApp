@@ -96,6 +96,38 @@ fun CustomScaffold(
     )
 }
 
+@Composable
+fun CustomScaffoldWithLargeTopAppBar(
+    topAppBarContent: @Composable ColumnScope.() -> Unit,
+    modifier: Modifier = Modifier
+        .fillMaxWidth(),
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        containerColor = MaterialTheme.colorScheme.background,
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(it),
+                content = content,
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
+        },
+        topBar = {
+            Column(
+                modifier = modifier
+                    .background(backgroundColor),
+                content = topAppBarContent
+            )
+        }
+    )
+}
+
 enum class CustomScaffoldTextAlign{
     START,
     CENTER

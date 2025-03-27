@@ -49,7 +49,11 @@ fun OnBoardScreen(
 
     LaunchedEffect(!state.isComplete) {
         if (state.isComplete) {
-            navController.navigate(Route.LoginScreen.route)
+            navController.navigate(Route.LoginScreen.route){
+                popUpTo(Route.OnBoardScreen.route){
+                    inclusive = true
+                }
+            }
         }
     }
 

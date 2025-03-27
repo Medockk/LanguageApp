@@ -15,4 +15,6 @@
     <string name="email">email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="what_is_your_mother_language">What is your Mother language?</string>
+    <string name="points">points</string>
 </resources>
