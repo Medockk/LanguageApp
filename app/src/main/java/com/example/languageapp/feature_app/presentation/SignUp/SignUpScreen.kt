@@ -2,6 +2,7 @@
 
 package com.example.languageapp.feature_app.presentation.SignUp
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
 import com.example.languageapp.feature_app.presentation.common.CustomButton
+import com.example.languageapp.feature_app.presentation.common.CustomIndicator
 import com.example.languageapp.feature_app.presentation.common.CustomScaffold
 import com.example.languageapp.feature_app.presentation.common.CustomScaffoldTextAlign
 import com.example.languageapp.feature_app.presentation.common.CustomTextField
@@ -87,6 +89,10 @@ fun SignUpScreen(
         ),
     )
 
+    BackHandler {
+        viewModel.onEvent(SignUpEvent.BackClick)
+    }
+
     if (state.exception.isNotEmpty()) {
         CustomAlertDialog(state.exception) {
             viewModel.onEvent(SignUpEvent.ResetException)
@@ -95,8 +101,8 @@ fun SignUpScreen(
 
     LaunchedEffect(!state.isComplete) {
         if (state.isComplete) {
-            navController.navigate(Route.LanguageSelectScreen.route){
-                popUpTo(Route.SignUpScreen.route){
+            navController.navigate(Route.LanguageSelectScreen.route) {
+                popUpTo(Route.SignUpScreen.route) {
                     inclusive = true
                 }
             }
@@ -109,7 +115,7 @@ fun SignUpScreen(
         showBackIcon = true,
         textSize = 17.sp,
         backClick = {
-            if (!state.isFirstRegisterPage){
+            if (!state.isFirstRegisterPage) {
                 viewModel.onEvent(SignUpEvent.BackClick)
             }
         }
@@ -238,8 +244,8 @@ fun SignUpScreen(
 
         TextButton(
             onClick = {
-                navController.navigate(Route.LoginScreen.route){
-                    popUpTo(Route.SignUpScreen.route){
+                navController.navigate(Route.LoginScreen.route) {
+                    popUpTo(Route.SignUpScreen.route) {
                         inclusive = true
                     }
                 }
@@ -267,4 +273,6 @@ fun SignUpScreen(
             }
         }
     }
+
+    CustomIndicator(state.showIndicator)
 }

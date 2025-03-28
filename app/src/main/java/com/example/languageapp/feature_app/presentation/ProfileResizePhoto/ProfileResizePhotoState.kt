@@ -8,4 +8,6 @@ data class ProfileResizePhotoState(
 
     val photoByteArray: ByteArray? = Route.ProfileResizePhotoScreen.photo,
     val photoBitmap: Bitmap? = null,
+    val showIndicator: Boolean = false,
+    val isComplete: Boolean = false,
 )

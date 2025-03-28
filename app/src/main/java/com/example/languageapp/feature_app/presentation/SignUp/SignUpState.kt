@@ -13,4 +13,5 @@ data class SignUpState(
 
     val isFirstRegisterPage: Boolean = true,
     val isComplete: Boolean = false,
+    val showIndicator: Boolean = false,
 )

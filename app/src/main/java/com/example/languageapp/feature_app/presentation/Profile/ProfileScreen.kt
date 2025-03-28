@@ -2,6 +2,7 @@
 
 package com.example.languageapp.feature_app.presentation.Profile
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,6 +79,25 @@ fun ProfileScreen(
             {viewModel.onEvent(ProfileEvent.LogOut)}
         ),
     )
+
+    LaunchedEffect(!state.isLogOut) {
+        if (state.isLogOut){
+            viewModel.onEvent(ProfileEvent.ChangeIsLogOutState)
+            navController.navigate(Route.LoginScreen.route){
+                popUpTo(Route.ProfileScreen.route){
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    BackHandler {
+        navController.navigate(Route.MainScreen.route){
+            popUpTo(Route.ProfileScreen.route){
+                inclusive = true
+            }
+        }
+    }
 
     if (state.exception.isNotEmpty()){
         CustomAlertDialog(state.exception) {

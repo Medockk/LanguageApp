@@ -19,7 +19,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.languageapp.feature_app.presentation.Animals.AnimalsScreen
 import com.example.languageapp.feature_app.presentation.LanguageSelect.LanguageSelectScreen
+import com.example.languageapp.feature_app.presentation.Listening.ListeningScreen
 import com.example.languageapp.feature_app.presentation.Login.LoginScreen
 import com.example.languageapp.feature_app.presentation.MainScreen.MainScreen
 import com.example.languageapp.feature_app.presentation.NoConnection.NoConnectionScreen
@@ -99,6 +101,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.WordPractice.route){
                             WordPracticeScreen(navController)
+                        }
+                        composable(Route.Animals.route){
+                            AnimalsScreen(navController)
+                        }
+                        composable(Route.Listening.route){
+                            ListeningScreen(navController)
                         }
                     }
                 }

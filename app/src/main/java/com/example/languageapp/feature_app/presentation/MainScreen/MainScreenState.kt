@@ -8,5 +8,6 @@ data class MainScreenState(
     val userName: String = "",
 
     val topUserList: List<TopUserModel> = emptyList(),
+    val showIndicator: Boolean = false,
 
 )

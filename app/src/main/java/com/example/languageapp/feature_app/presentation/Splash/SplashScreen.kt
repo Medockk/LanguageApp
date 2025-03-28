@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
@@ -27,7 +27,7 @@ import com.example.languageapp.feature_app.presentation.Route
 @Composable
 fun SplashScreen(
     navController: NavController,
-    viewModel: SplashViewModel = viewModel()
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
 
     val state = viewModel.state.value
@@ -35,6 +35,15 @@ fun SplashScreen(
     LaunchedEffect(!state.isTimerOut) {
         if (state.isTimerOut){
             navController.navigate(Route.OnBoardScreen.route){
+                popUpTo(Route.SplashScreen.route){
+                    inclusive = true
+                }
+            }
+        }
+    }
+    LaunchedEffect(!state.isQueueComplete) {
+        if (state.isQueueComplete){
+            navController.navigate(Route.LoginScreen.route){
                 popUpTo(Route.SplashScreen.route){
                     inclusive = true
                 }

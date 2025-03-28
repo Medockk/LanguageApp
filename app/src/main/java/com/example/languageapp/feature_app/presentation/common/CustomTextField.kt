@@ -25,15 +25,18 @@ fun CustomTextField(
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     isPasswordState: Boolean = true,
+    enabled: Boolean = true,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
     changeIsPasswordState: () -> Unit = {},
 ) {
     TextField(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         value = value,
+        enabled = enabled,
         onValueChange = onValueChange,
         textStyle = MaterialTheme.typography.displayMedium.copy(
-            MaterialTheme.colorScheme.onPrimary
+            textColor
         ),
         placeholder = {
             Text(
@@ -63,6 +66,8 @@ fun CustomTextField(
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
         )
     )
 }

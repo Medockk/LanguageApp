@@ -18,4 +18,6 @@
     <string name="confirm_password">Подтвердить пароль</string>
     <string name="what_is_your_mother_language">Какой ваш родной язык?</string>
     <string name="points">очков</string>
+    <string name="please_press_button_and_say_this_word_our_service_will_check_your_pronunciation">Пожалуйста, нажмите на кнопку и скажите это слово. Наш сервис проверит ваше произношение</string>
+    <string name="check_my_speech">Проверить мою речь</string>
 </resources>

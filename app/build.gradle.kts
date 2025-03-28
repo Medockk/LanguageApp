@@ -78,8 +78,8 @@ dependencies {
 
     //tensorLite
     //implementation(libs.tensor.lite)
+    //implementation("com.yandex.android:speechkit:3.12.2")
 
-    //implementation(libs.androidx.statusbar)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

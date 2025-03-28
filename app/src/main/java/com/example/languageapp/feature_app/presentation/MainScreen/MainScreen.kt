@@ -2,8 +2,8 @@
 
 package com.example.languageapp.feature_app.presentation.MainScreen
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -34,11 +35,15 @@ import com.example.languageapp.feature_app.presentation.MainScreen.components.Cu
 import com.example.languageapp.feature_app.presentation.MainScreen.components.CustomTopUserCard
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
+import com.example.languageapp.feature_app.presentation.common.CustomIndicator
 import com.example.languageapp.feature_app.presentation.common.CustomScaffoldWithLargeTopAppBar
 import com.example.languageapp.feature_app.presentation.ui.theme._5B7BFEFF
+import com.example.languageapp.feature_app.presentation.ui.theme._5BA890
 import com.example.languageapp.feature_app.presentation.ui.theme._B6B6B6
 import com.example.languageapp.feature_app.presentation.ui.theme._D9D9D9
+import com.example.languageapp.feature_app.presentation.ui.theme._F76400
 import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedium
+import com.example.languageapp.feature_app.presentation.ui.theme.onError
 
 @Composable
 fun MainScreen(
@@ -54,11 +59,13 @@ fun MainScreen(
                 "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//guess_the_animal_icon.png",
                 "Guess the animal"
             ),
-            {}
+            {
+                navController.navigate(Route.Animals.route)
+            }
         ),
         listOf(
             ExerciseItem(
-                _5B7BFEFF,
+                onError,
                 "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//work_practice_icon.png",
                 "Word practice"
             ),
@@ -68,15 +75,17 @@ fun MainScreen(
         ),
         listOf(
             ExerciseItem(
-                _5B7BFEFF,
+                _F76400,
                 "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//audition_icon.png",
                 "Audition"
             ),
-            {}
+            {
+                navController.navigate(Route.Listening.route)
+            }
         ),
         listOf(
             ExerciseItem(
-                _5B7BFEFF,
+                _5BA890,
                 "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//game_icon.png",
                 "Game"
             ),
@@ -95,12 +104,16 @@ fun MainScreen(
             Box(Modifier
                 .padding(start = 25.dp)
                 .size(55.dp)
-                .background(_D9D9D9, CircleShape)) {
+                .background(_D9D9D9, CircleShape)
+                .clickable {
+                    navController.navigate(Route.ProfileScreen.route)
+                }) {
                 AsyncImage(
                     model = state.userImage,
                     contentDescription = null,
                     modifier = Modifier
-                        .matchParentSize(),
+                        .matchParentSize()
+                        .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -170,7 +183,6 @@ fun MainScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     this@LazyVerticalGrid.items(exercises) {
-                        Log.e("icon", (it[0]as ExerciseItem).icon)
                         CustomExerciseCard(
                             background = (it[0] as ExerciseItem).background,
                             icon = (it[0] as ExerciseItem).icon,
@@ -184,4 +196,6 @@ fun MainScreen(
             }
         }
     }
+
+    CustomIndicator(state.showIndicator)
 }

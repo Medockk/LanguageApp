@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,8 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
 import com.example.languageapp.feature_app.presentation.common.CustomButton
+import com.example.languageapp.feature_app.presentation.common.CustomIndicator
 import com.example.languageapp.feature_app.presentation.common.CustomScaffold
 import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedium
 import com.example.languageapp.feature_app.presentation.ui.theme.resizePhotoBackground
@@ -43,6 +46,17 @@ fun ProfileResizePhotoScreen(
     if (state.exception.isNotEmpty()) {
         CustomAlertDialog(state.exception) {
             viewModel.onEvent(ProfileResizePhotoEvent.ResetException)
+        }
+    }
+
+    LaunchedEffect(!state.isComplete) {
+        if (state.isComplete){
+            viewModel.onEvent(ProfileResizePhotoEvent.ChangeIsCompleteState)
+            navController.navigate(Route.ProfileScreen.route){
+                popUpTo(Route.ProfileResizePhotoScreen.route){
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -165,4 +179,6 @@ fun ProfileResizePhotoScreen(
             Spacer(Modifier.height(30.dp))
         }
     }
+
+    CustomIndicator(state.showIndicator)
 }

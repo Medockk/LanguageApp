@@ -14,4 +14,6 @@ sealed class Route(val route: String) {
         var photo: ByteArray? = null
     }
     data object WordPractice: Route("WordPractice")
+    data object Animals: Route("Animals")
+    data object Listening: Route("Listening")
 }

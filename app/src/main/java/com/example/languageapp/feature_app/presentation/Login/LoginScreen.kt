@@ -31,6 +31,7 @@ import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
 import com.example.languageapp.feature_app.presentation.common.CustomButton
+import com.example.languageapp.feature_app.presentation.common.CustomIndicator
 import com.example.languageapp.feature_app.presentation.common.CustomScaffold
 import com.example.languageapp.feature_app.presentation.common.CustomScaffoldTextAlign
 import com.example.languageapp.feature_app.presentation.common.CustomTextField
@@ -72,7 +73,11 @@ fun LoginScreen(
 
     LaunchedEffect(!state.isSuccessfulLogin) {
         if (state.isSuccessfulLogin) {
-
+            navController.navigate(Route.MainScreen.route){
+                popUpTo(Route.LoginScreen.route){
+                    inclusive = true
+                }
+            }
         }
     }
     CustomScaffold(
@@ -187,4 +192,6 @@ fun LoginScreen(
             }
         }
     }
+
+    CustomIndicator(state.showIndicator)
 }

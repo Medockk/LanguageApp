@@ -17,4 +17,6 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="what_is_your_mother_language">What is your Mother language?</string>
     <string name="points">points</string>
+    <string name="please_press_button_and_say_this_word_our_service_will_check_your_pronunciation">"Please press button and say this word. Our service will check your pronunciation "</string>
+    <string name="check_my_speech">Check my speech</string>
 </resources>
