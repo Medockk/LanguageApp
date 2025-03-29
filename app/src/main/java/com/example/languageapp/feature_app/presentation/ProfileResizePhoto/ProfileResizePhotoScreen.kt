@@ -11,12 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -50,10 +51,10 @@ fun ProfileResizePhotoScreen(
     }
 
     LaunchedEffect(!state.isComplete) {
-        if (state.isComplete){
+        if (state.isComplete) {
             viewModel.onEvent(ProfileResizePhotoEvent.ChangeIsCompleteState)
-            navController.navigate(Route.ProfileScreen.route){
-                popUpTo(Route.ProfileResizePhotoScreen.route){
+            navController.navigate(Route.ProfileScreen.route) {
+                popUpTo(Route.ProfileResizePhotoScreen.route) {
                     inclusive = true
                 }
             }
@@ -86,7 +87,7 @@ fun ProfileResizePhotoScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.3f)
+                    .fillMaxHeight(0.4f)
                     .border(1.dp, Color.LightGray),
                 contentAlignment = Alignment.Center
             ) {
@@ -99,14 +100,17 @@ fun ProfileResizePhotoScreen(
                             .fillMaxSize()
                             .background(resizePhotoBackground)
                     )
-                }
 
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .alpha(0.7f)
-                        .background(resizePhotoBackground)
-                )
+
+                    Image(
+                        bitmap = state.photoBitmap.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth(0.4f)
+                            .clip(CircleShape)
+                    )
+                }
 
                 Box(
                     modifier = Modifier

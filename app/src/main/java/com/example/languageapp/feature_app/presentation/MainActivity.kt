@@ -18,11 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Animals.AnimalsScreen
 import com.example.languageapp.feature_app.presentation.LanguageSelect.LanguageSelectScreen
 import com.example.languageapp.feature_app.presentation.Listening.ListeningScreen
@@ -51,7 +49,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val image = painterResource(R.drawable.splash_icon)
 
             try {
                 val byteBuffer = getByteBuffer(this.assets, "model.tflite")

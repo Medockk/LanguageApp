@@ -9,6 +9,7 @@ import com.example.languageapp.feature_app.domain.utils.NetworkResult
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.storage.storage
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration
@@ -17,24 +18,27 @@ class UserDataRepositoryImpl(
     private val userDataDao: UserDataDao
 ) : UserDataRepository {
 
-    override suspend fun getUserData() = flow<NetworkResult<UserDataModel>> {
-
-        emit(NetworkResult.Loading())
+    override suspend fun getUserData(): Flow<NetworkResult<UserDataModel>> {
 
         val userID = getUserId()
-        emit(NetworkResult.Success(userDataDao.getUserData(userID)))
+        return flow<NetworkResult<UserDataModel>> {
 
-        val data = client.postgrest["Users"].select {
-            filter {
-                eq("userID", userID)
-            }
-        }.decodeList<UserDataModelEntity>()
+            emit(NetworkResult.Loading())
+            emit(NetworkResult.Success(userDataDao.getUserData(userID)))
 
-        emit(NetworkResult.Success(data[0]))
-        userDataDao.upsertData(data[0])
-    }.catch {
-        emit(NetworkResult.Error(it.localizedMessage))
+            val data = client.postgrest["Users"].select {
+                filter {
+                    eq("userID", userID)
+                }
+            }.decodeList<UserDataModelEntity>()
+
+            emit(NetworkResult.Success(data[0]))
+            userDataDao.upsertData(data[0])
+        }.catch {
+            emit(NetworkResult.Error(it.localizedMessage))
+        }
     }
+
 
     override suspend fun updateAvatar(byteArray: ByteArray) {
 
