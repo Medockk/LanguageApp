@@ -77,7 +77,8 @@ dependencies {
     implementation(libs.hilt.navigation)
 
     //tensorLite
-    //implementation(libs.tensor.lite)
+    implementation(libs.tensor.lite)
+
     //implementation("com.yandex.android:speechkit:3.12.2")
 
     implementation(libs.androidx.core.ktx)

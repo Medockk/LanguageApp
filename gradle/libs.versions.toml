@@ -22,7 +22,7 @@ viewModel = "2.8.7"
 
 supabase = "3.0.3"
 ktor = "3.0.3"
-#tensorLite = "1.9.0"
+tensorLite = "1.9.0"
 yandexSpeech = "3.12.2"
 
 [libraries]
@@ -70,7 +70,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
 
 #tensor-lite
-#tensor-lite = {module = "org.tensorflow:tensorflow-lite", version.ref = "tensorLite"}
+tensor-lite = {module = "org.tensorflow:tensorflow-lite", version.ref = "tensorLite"}
 yandex-speech = {module = "com.yandex.android:speechkit", version.ref = "yandexSpeech"}
 
 [plugins]
