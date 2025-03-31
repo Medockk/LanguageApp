@@ -22,11 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.OnBoard.components.CustomPagerCircleState
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
@@ -35,10 +37,16 @@ import com.example.languageapp.feature_app.presentation.common.CustomButton
 @Composable
 fun OnBoardScreen(
     navController: NavController,
-    viewModel: OnBoardViewModel = hiltViewModel()
+    viewModel: OnBoardViewModel = hiltViewModel(),
+    list: List<OnBoardItem> = viewModel.state.value.list
 ) {
 
     val state = viewModel.state.value
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(OnBoardEvent.SetQueueList(list))
+    }
+
     val pagerState = rememberPagerState(state.currentPage) { state.list.size }
 
     if (state.exception.isNotEmpty()) {
@@ -80,7 +88,8 @@ fun OnBoardScreen(
                     painter = painterResource(state.list[page].image),
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth(0.65f),
+                        .fillMaxWidth(0.65f)
+                        .testTag("img"),
                     contentScale = ContentScale.Crop
                 )
 
@@ -92,13 +101,13 @@ fun OnBoardScreen(
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = state.list[page].title,
+                    text = stringResource(state.list[page].title),
                     style = MaterialTheme.typography.bodyMedium
                         .copy(MaterialTheme.colorScheme.onPrimary)
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = state.list[page].description,
+                    text = stringResource(state.list[page].description),
                     style = MaterialTheme.typography.bodySmall
                         .copy(MaterialTheme.colorScheme.onTertiary)
                 )
@@ -121,7 +130,7 @@ fun OnBoardScreen(
                     colors = ButtonDefaults.buttonColors(Color.Transparent)
                 ) {
                     Text(
-                        text = "Skip onboarding",
+                        text = stringResource(R.string.skip_onboarding),
                         style = MaterialTheme.typography.bodySmall
                             .copy(
                                 MaterialTheme.colorScheme.outline

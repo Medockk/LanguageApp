@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,7 +44,7 @@ fun AnimalsScreen(
     val state = viewModel.state.value
 
     CustomScaffold(
-        text = "Guess the animal",
+        text = stringResource(R.string.guess_the_animal),
         icon = ImageVector.vectorResource(R.drawable.custom_back_icon),
         backClick = {
             navController.navigate(Route.MainScreen.route) {
@@ -80,7 +81,7 @@ fun AnimalsScreen(
 
             Spacer(Modifier.height(15.dp))
             Text(
-                text = "Write who is on image",
+                text = stringResource(R.string.write_who_is_on_image),
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(400),
                 fontSize = 15.sp,
@@ -113,10 +114,10 @@ fun AnimalsScreen(
             Spacer(Modifier.height(20.dp))
             Text(
                 text = if (state.isRightAnswer) {
-                    "Holy Molly! That is Right!"
+                    stringResource(R.string.holy_molly_that_is_right)
                 }else{
-                    "Eh? Wrong answer :(\n" +
-                            "That is: ${state.animal?.animalName}"
+                    stringResource(R.string.eh_wrong_answer_that_is) +
+                            "${state.animal?.animalName}"
                 },
                 fontFamily = fontFredokaBold,
                 fontWeight = FontWeight(500),
@@ -135,9 +136,9 @@ fun AnimalsScreen(
         )
         CustomButton(
             text = if (state.isRightAnswer != null) {
-                "Next"
+                stringResource(R.string.next)
             } else {
-                "Check"
+                stringResource(R.string.check)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,7 +150,7 @@ fun AnimalsScreen(
         Spacer(Modifier.height(10.dp))
         if (state.isRightAnswer != null && !state.isRightAnswer){
             CustomButton(
-                text = "Try again",
+                text = stringResource(R.string.try_again),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)

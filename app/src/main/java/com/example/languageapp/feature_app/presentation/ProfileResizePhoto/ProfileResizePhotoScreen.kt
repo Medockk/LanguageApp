@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,18 +18,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
 import com.example.languageapp.feature_app.presentation.common.CustomButton
@@ -62,7 +66,7 @@ fun ProfileResizePhotoScreen(
     }
 
     CustomScaffold(
-        text = "Your photo is gorgeous!",
+        text = stringResource(R.string.your_photo_is_gorgeous),
         showBackIcon = false
     ) {
         Column(
@@ -72,8 +76,7 @@ fun ProfileResizePhotoScreen(
                 .padding(top = 15.dp)
         ) {
             Text(
-                text = "Just resize that photo\n" +
-                        "for fit in square",
+                text = stringResource(R.string.just_resize_that_photo_for_fit_in_square),
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(500),
                 fontSize = 22.sp,
@@ -98,16 +101,20 @@ fun ProfileResizePhotoScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(resizePhotoBackground)
                     )
 
+                    Box(Modifier
+                        .fillMaxSize()
+                        .alpha(0.7f)
+                        .background(resizePhotoBackground))
 
                     Image(
                         bitmap = state.photoBitmap.asImageBitmap(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .fillMaxWidth(0.4f)
+                            .fillMaxWidth(0.65f)
+                            .aspectRatio(1f)
                             .clip(CircleShape)
                     )
                 }
@@ -172,7 +179,7 @@ fun ProfileResizePhotoScreen(
             Spacer(Modifier.weight(1.5f))
 
             CustomButton(
-                text = "Use that image",
+                text = stringResource(R.string.use_that_image),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)

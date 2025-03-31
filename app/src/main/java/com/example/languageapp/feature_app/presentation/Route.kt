@@ -7,7 +7,9 @@ sealed class Route(val route: String) {
     data object LoginScreen : Route("LoginScreen")
     data object SignUpScreen : Route("SignUpScreen")
     data object NoConnectionScreen : Route("NoConnectionScreen")
-    data object LanguageSelectScreen : Route("LanguageSelectScreen")
+    data object LanguageSelectScreen : Route("LanguageSelectScreen"){
+        var isAfterSignUpScreen = true
+    }
     data object MainScreen : Route("MainScreen")
     data object ProfileScreen : Route("ProfileScreen")
     data object ProfileResizePhotoScreen : Route("ProfileResizePhotoScreen"){

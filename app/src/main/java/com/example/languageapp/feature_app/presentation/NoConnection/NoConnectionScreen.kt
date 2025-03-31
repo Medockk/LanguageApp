@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,8 +56,7 @@ fun NoConnectionScreen(
         )
         Spacer(Modifier.height(30.dp))
         Text(
-            text = "No \n" +
-                    "internet connection ",
+            text = stringResource(R.string.no_internet_connection),
             fontFamily = fontFredokaBold,
             fontSize = 30.sp,
             fontWeight = FontWeight(500),
@@ -64,7 +64,7 @@ fun NoConnectionScreen(
         )
         Spacer(Modifier.weight(2f))
         CustomButton(
-            text = "Check again",
+            text = stringResource(R.string.check_again),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp)

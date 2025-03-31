@@ -25,12 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.MainScreen.components.CustomExerciseCard
 import com.example.languageapp.feature_app.presentation.MainScreen.components.CustomTopUserCard
 import com.example.languageapp.feature_app.presentation.Route
@@ -56,8 +58,8 @@ fun MainScreen(
         listOf(
             ExerciseItem(
                 _5B7BFEFF,
-                "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//guess_the_animal_icon.png",
-                "Guess the animal"
+                R.drawable.guess_the_animal_image,
+                stringResource(R.string.guess_the_animal)
             ),
             {
                 navController.navigate(Route.Animals.route)
@@ -66,8 +68,8 @@ fun MainScreen(
         listOf(
             ExerciseItem(
                 onError,
-                "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//work_practice_icon.png",
-                "Word practice"
+                R.drawable.word_practice_image,
+                stringResource(R.string.word_practice)
             ),
             {
                 navController.navigate(Route.WordPractice.route)
@@ -76,8 +78,8 @@ fun MainScreen(
         listOf(
             ExerciseItem(
                 _F76400,
-                "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//audition_icon.png",
-                "Audition"
+                R.drawable.audition_image,
+                stringResource(R.string.audition)
             ),
             {
                 navController.navigate(Route.Listening.route)
@@ -86,8 +88,8 @@ fun MainScreen(
         listOf(
             ExerciseItem(
                 _5BA890,
-                "https://uftclonibwagnofwkbtp.supabase.co/storage/v1/object/public/avatars//game_icon.png",
-                "Game"
+                R.drawable.game_image,
+                stringResource(R.string.game)
             ),
             {}
         )
@@ -119,7 +121,7 @@ fun MainScreen(
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                text = "Hello, ${state.userName}",
+                text = stringResource(R.string.Hello) +", ${state.userName}",
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(500),
                 fontSize = 22.sp,
@@ -129,7 +131,7 @@ fun MainScreen(
             )
             Spacer(Modifier.height(5.dp))
             Text(
-                text = "Are you ready for learning today?",
+                text = stringResource(R.string.are_you_ready_for_learning_today),
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(500),
                 fontSize = 17.sp,
@@ -142,7 +144,7 @@ fun MainScreen(
     ) {
         Spacer(Modifier.height(10.dp))
         Text(
-            text = "Top users",
+            text = stringResource(R.string.top_users),
             fontFamily = fontFredokaMedium,
             fontWeight = FontWeight(500),
             fontSize = 20.sp,
@@ -168,7 +170,7 @@ fun MainScreen(
             }
             item {
                 Text(
-                    text = "Available excersises",
+                    text = stringResource(R.string.available_excersises),
                     fontFamily = fontFredokaMedium,
                     fontWeight = FontWeight(500),
                     fontSize = 20.sp,

@@ -5,4 +5,6 @@ sealed class OnBoardEvent {
     data class NextPage(val page: Int) : OnBoardEvent()
     data object ResetException: OnBoardEvent()
     data object SkipOnBoardClick: OnBoardEvent()
+
+    data class SetQueueList(val list: List<OnBoardItem>) : OnBoardEvent()
 }

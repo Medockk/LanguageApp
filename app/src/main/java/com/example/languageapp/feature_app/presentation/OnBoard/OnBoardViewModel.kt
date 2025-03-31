@@ -79,6 +79,10 @@ class OnBoardViewModel @Inject constructor(
                     }
                 }
             }
+
+            is OnBoardEvent.SetQueueList -> {
+                _state.value = state.value.copy(list = event.list)
+            }
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.example.languageapp.feature_app.data.repository
 
+import android.util.Log
+import com.example.languageapp.feature_app.data.data_source.local.dao.UserConfigDao
 import com.example.languageapp.feature_app.data.data_source.local.dao.UserDataDao
 import com.example.languageapp.feature_app.data.data_source.remote.Supabase.client
+import com.example.languageapp.feature_app.data.model.UserDataConfigImpl
 import com.example.languageapp.feature_app.data.model.UserDataModelEntity
 import com.example.languageapp.feature_app.domain.model.UserDataModel
 import com.example.languageapp.feature_app.domain.repository.UserDataRepository
@@ -15,8 +18,21 @@ import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration
 
 class UserDataRepositoryImpl(
-    private val userDataDao: UserDataDao
+    private val userDataDao: UserDataDao,
+    private val userConfigDao: UserConfigDao
 ) : UserDataRepository {
+
+    override suspend fun upsertUserConfig(systemTheme: Boolean) {
+        val userID = getUserId()
+
+        userConfigDao.upsertConfig(UserDataConfigImpl(userID = userID, isSystemInDarkTheme = systemTheme))
+    }
+
+    override suspend fun getUserConfig() = flow<NetworkResult<UserDataConfigImpl>> {
+
+        val userID = getUserId()
+        emit(NetworkResult.Success(userConfigDao.getUserConfig(userID)))
+    }
 
     override suspend fun getUserData(): Flow<NetworkResult<UserDataModel>> {
 
@@ -30,11 +46,12 @@ class UserDataRepositoryImpl(
                 filter {
                     eq("userID", userID)
                 }
-            }.decodeList<UserDataModelEntity>()
+            }.decodeSingle<UserDataModelEntity>()
 
-            emit(NetworkResult.Success(data[0]))
-            userDataDao.upsertData(data[0])
+            emit(NetworkResult.Success(data))
+            userDataDao.upsertData(data)
         }.catch {
+            Log.e("ex", "flow catch")
             emit(NetworkResult.Error(it.localizedMessage))
         }
     }

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.languageapp.feature_app.data.model.UserDataConfigImpl
 import com.example.languageapp.feature_app.data.model.UserDataModelEntity
 
 @Dao
@@ -17,4 +18,14 @@ interface UserDataDao {
 
     @Query("DELETE FROM UserDataModelEntity")
     fun clearData()
+}
+
+@Dao
+interface UserConfigDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsertConfig(userDataConfig: UserDataConfigImpl)
+
+    @Query("SELECT * FROM UserDataConfigImpl WHERE userID =:userID")
+    fun getUserConfig(userID: String) : UserDataConfigImpl
 }

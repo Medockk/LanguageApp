@@ -1,5 +1,7 @@
 package com.example.languageapp.feature_app.presentation.SignUp
 
+import android.app.Activity
+
 data class SignUpState(
     val exception: String = "",
     val firstName: String = "",
@@ -10,6 +12,7 @@ data class SignUpState(
     val password: String = "",
     val confirmPassword: String = "",
     val isChecked: Boolean = false,
+    val activity: Activity? = null,
 
     val isFirstRegisterPage: Boolean = true,
     val isComplete: Boolean = false,

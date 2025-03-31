@@ -3,6 +3,8 @@
 package com.example.languageapp.feature_app.presentation.SignUp
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,6 +51,7 @@ fun SignUpScreen(
 ) {
 
     val state = viewModel.state.value
+    val activity = LocalActivity.current
     val signUpFirstPageList = listOf(
         listOf(
             stringResource(R.string.first_name),
@@ -110,7 +113,7 @@ fun SignUpScreen(
     }
 
     CustomScaffold(
-        text = "Signup",
+        text = stringResource(R.string.sign_up),
         textAlign = CustomScaffoldTextAlign.CENTER,
         showBackIcon = true,
         textSize = 17.sp,
@@ -153,7 +156,7 @@ fun SignUpScreen(
                     Spacer(Modifier.height(if (index != signUpFirstPageList.lastIndex) 25.dp else 35.dp))
                 }
                 CustomButton(
-                    text = "Continue",
+                    text = stringResource(R.string.continue_btn),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
@@ -193,7 +196,10 @@ fun SignUpScreen(
                         )
                         Text(
                             modifier = Modifier
-                                .padding(start = 40.dp),
+                                .padding(start = 40.dp)
+                                .clickable {
+                                    viewModel.onEvent(SignUpEvent.DownloadPolitic(activity))
+                                },
                             text = buildAnnotatedString {
                                 withStyle(
                                     SpanStyle(
@@ -203,7 +209,7 @@ fun SignUpScreen(
                                         fontWeight = FontWeight(400)
                                     )
                                 ) {
-                                    append("I ")
+                                    append(stringResource(R.string.i))
                                 }
                                 withStyle(
                                     SpanStyle(
@@ -213,7 +219,7 @@ fun SignUpScreen(
                                         fontSize = 17.sp
                                     )
                                 ) {
-                                    append("have made myself acquainted with the Rules")
+                                    append(stringResource(R.string.have_made_myself_acquainted_with_the_rules))
                                 }
                                 withStyle(
                                     SpanStyle(
@@ -223,7 +229,7 @@ fun SignUpScreen(
                                         fontWeight = FontWeight(400)
                                     )
                                 ) {
-                                    append("_and accept all its provisions,")
+                                    append(stringResource(R.string.and_accept_all_its_provisions))
                                 }
                             },
                             textAlign = TextAlign.Start
@@ -233,7 +239,7 @@ fun SignUpScreen(
                 Spacer(Modifier.height(70.dp))
 
                 CustomButton(
-                    text = "Signup",
+                    text = stringResource(R.string.sign_up),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
@@ -258,13 +264,13 @@ fun SignUpScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Already you member? ",
+                    text = stringResource(R.string.already_you_member),
                     style = MaterialTheme.typography.displaySmall.copy(
                         MaterialTheme.colorScheme.surface
                     )
                 )
                 Text(
-                    text = "Login",
+                    text = stringResource(R.string.login),
                     style = MaterialTheme.typography.displayMedium.copy(
                         Color(0xFF5B7BFE),
                         fontFamily = fontFredokaMedium

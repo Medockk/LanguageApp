@@ -25,12 +25,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.common.CustomAlertDialog
 import com.example.languageapp.feature_app.presentation.common.CustomButton
@@ -59,23 +61,23 @@ fun ProfileScreen(
     }
     val buttonList = listOf(
         listOf(
-            "Switch to Dark",
+            stringResource(R.string.switch_to_dark),
             {
                 themeSwitch()
             }
         ),
         listOf(
-            "Change mother language",
+            stringResource(R.string.change_mother_language),
             {}
         ),
         listOf(
-            "Change your image",
+            stringResource(R.string.change_your_image),
             {
                 launcher.launch("image/*")
             }
         ),
         listOf(
-            "Logout",
+            stringResource(R.string.logout),
             {viewModel.onEvent(ProfileEvent.LogOut)}
         ),
     )
@@ -126,7 +128,7 @@ fun ProfileScreen(
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                text = "Your profile, ${state.userName}",
+                text = stringResource(R.string.your_profile) + state.userName,
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(500),
                 fontSize = 22.sp,

@@ -47,7 +47,7 @@ fun ListeningScreen(
     val state = viewModel.state.value
 
     CustomScaffold(
-        text = "Listening",
+        text = stringResource(R.string.listening),
         icon = ImageVector.vectorResource(R.drawable.custom_back_icon),
         backClick = {
             navController.navigate(Route.MainScreen.route) {
@@ -99,7 +99,7 @@ fun ListeningScreen(
             }
         } else {
             Text(
-                text = "Your result",
+                text = stringResource(R.string.your_result),
                 fontFamily = fontFredokaRegular,
                 fontWeight = FontWeight(400),
                 fontSize = 15.sp,
@@ -126,7 +126,7 @@ fun ListeningScreen(
 
             if (state.isRightAnswer){
                 CustomButton(
-                    text = "Yay! Go next",
+                    text = stringResource(R.string.yay_go_next),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)

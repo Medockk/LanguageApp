@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -16,11 +17,13 @@ fun CustomButton(
     modifier: Modifier = Modifier,
     background: Color = MaterialTheme.colorScheme.secondary,
     enabled: Boolean = true,
+    tag: String = "btn",
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .testTag(tag),
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(background)

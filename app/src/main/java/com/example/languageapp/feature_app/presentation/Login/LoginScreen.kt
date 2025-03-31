@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,15 +50,15 @@ fun LoginScreen(
 
     val loginList = listOf(
         listOf(
-            "Email Address",
+            stringResource(R.string.email_address),
             state.email,
             { it: String -> viewModel.onEvent(LoginEvent.EnterEmail(it)) } as (String) -> Unit,
             false,
             state.isShowPassword,
-            "Email",
+            stringResource(R.string.email),
         ),
         listOf(
-            "Password",
+            stringResource(R.string.password),
             state.password,
             { it: String -> viewModel.onEvent(LoginEvent.EnterPassword(it)) } as (String) -> Unit,
             true,
@@ -81,7 +83,7 @@ fun LoginScreen(
         }
     }
     CustomScaffold(
-        text = "Login",
+        text = stringResource(R.string.login),
         textAlign = CustomScaffoldTextAlign.CENTER,
         showBackIcon = true,
         textSize = 17.sp,
@@ -100,10 +102,14 @@ fun LoginScreen(
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                text = "For free, join now\nand start learning",
+                text = stringResource(R.string.for_free_join_now_and_start_learning),
                 style = MaterialTheme.typography.titleMedium.copy(
                     MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 25.dp),
+                textAlign = TextAlign.Center
             )
         }
         Spacer(Modifier.height(30.dp))
@@ -136,7 +142,7 @@ fun LoginScreen(
             }
 
             Text(
-                text = "Forgot Password",
+                text = stringResource(R.string.forgot_password),
                 fontFamily = fontFredokaRegular,
                 fontWeight = FontWeight(400),
                 fontSize = 15.sp,
@@ -152,7 +158,7 @@ fun LoginScreen(
             )
             Spacer(Modifier.height(30.dp))
             CustomButton(
-                text = "Login",
+                text = stringResource(R.string.login),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
@@ -176,13 +182,13 @@ fun LoginScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Not you member? ",
+                        text = stringResource(R.string.not_you_member),
                         style = MaterialTheme.typography.displaySmall.copy(
                             MaterialTheme.colorScheme.surface
                         )
                     )
                     Text(
-                        text = "SignUp",
+                        text = stringResource(R.string.signup),
                         style = MaterialTheme.typography.displayMedium.copy(
                             Color(0xFF5B7BFE),
                             fontFamily = fontFredokaMedium

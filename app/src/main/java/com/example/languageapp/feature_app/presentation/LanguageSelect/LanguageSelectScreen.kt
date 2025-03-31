@@ -49,7 +49,7 @@ fun LanguageSelectScreen(
     }
 
     CustomScaffold(
-        text = "Language select",
+        text = stringResource(R.string.language_select),
         textSize = 17.sp,
         textAlign = CustomScaffoldTextAlign.CENTER,
         showBackIcon = false,
@@ -84,7 +84,7 @@ fun LanguageSelectScreen(
                     shape = RoundedCornerShape(20.dp),
                 ) {
                     Text(
-                        text = it,
+                        text = stringResource(it),
                         fontFamily = fontFredokaMedium,
                         fontWeight = FontWeight(500),
                         fontSize = 22.sp,
@@ -104,7 +104,7 @@ fun LanguageSelectScreen(
         contentAlignment = Alignment.BottomCenter
     ){
         CustomButton(
-            text = "Choose",
+            text = stringResource(R.string.choose),
             modifier = Modifier
                 .padding(start = 25.dp, end = 25.dp, bottom = 25.dp)
                 .fillMaxWidth()

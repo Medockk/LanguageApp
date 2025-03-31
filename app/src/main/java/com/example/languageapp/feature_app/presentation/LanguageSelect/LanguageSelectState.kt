@@ -1,7 +1,16 @@
 package com.example.languageapp.feature_app.presentation.LanguageSelect
 
-data class LanguageSelectState(
-    val motherLanguage: String = "English",
+import androidx.annotation.StringRes
+import com.example.languageapp.R
 
-    val languageList: List<String> = listOf("English", "Russian", "Kazakh", "Chinese", "Japan", "Belarus"),
+data class LanguageSelectState(
+    @StringRes val motherLanguage: Int = R.string.english,
+
+    @StringRes val languageList: List<Int> = listOf(
+        R.string.english,
+        R.string.russian,
+        R.string.kazakh, R.string.chinese,
+        R.string.japan,
+        R.string.belarus
+    ),
 )

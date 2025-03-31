@@ -1,8 +1,7 @@
-package com.example.languageapp.feature_app.presentation
+package com.example.languageapp.feature_app.presentation.MainActivity
 
 import android.content.res.AssetManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,12 +11,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,16 +27,15 @@ import com.example.languageapp.feature_app.presentation.NoConnection.NoConnectio
 import com.example.languageapp.feature_app.presentation.OnBoard.OnBoardScreen
 import com.example.languageapp.feature_app.presentation.Profile.ProfileScreen
 import com.example.languageapp.feature_app.presentation.ProfileResizePhoto.ProfileResizePhotoScreen
+import com.example.languageapp.feature_app.presentation.Route
 import com.example.languageapp.feature_app.presentation.SignUp.SignUpScreen
 import com.example.languageapp.feature_app.presentation.Splash.SplashScreen
 import com.example.languageapp.feature_app.presentation.WordPractice.WordPracticeScreen
 import com.example.languageapp.feature_app.presentation.ui.theme.LanguageAppTheme
 import com.example.languageapp.feature_app.presentation.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
-import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.nio.channels.FileChannel
 
 @AndroidEntryPoint
@@ -50,29 +46,32 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            try {
-                val byteBuffer = getByteBuffer(this.assets, "model.tflite")
-                val interpreter = Interpreter(byteBuffer)
+//            try {
+//                val byteBuffer = getByteBuffer(this.assets, "model.tflite")
+//                val interpreter = Interpreter(byteBuffer)
+//
+//                val output = ByteBuffer.allocateDirect(4)
+//                output.order(ByteOrder.nativeOrder())
+//                interpreter.run(floatArrayOf(17f), output)
+//                output.rewind()
+//
+//                Log.e("tflite", output.getFloat().toString())
+//            } catch (e: Exception) {
+//                Log.e("tflite", e.message.toString())
+//            }
 
-                val output = ByteBuffer.allocateDirect(4)
-                output.order(ByteOrder.nativeOrder())
-                interpreter.run(floatArrayOf(17f), output)
-                output.rewind()
-
-                Log.e("tflite", output.getFloat().toString())
-            } catch (e: Exception) {
-                Log.e("tflite", e.message.toString())
-            }
-
-
-
+            val viewModel: MainActivityViewModel = hiltViewModel()
             val isSystemInDarkTheme = isSystemInDarkTheme()
+
+            LaunchedEffect(Unit) {
+                viewModel.onEvent(MainActivityEvent.ChangeSystemTheme(isSystemInDarkTheme))
+            }
             this.window.statusBarColor = primaryColor.toArgb()
+
             val navController = rememberNavController()
-            var darkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
             LanguageAppTheme(
                 dynamicColor = false,
-                darkTheme = darkTheme
+                darkTheme = viewModel.state.value.isSystemInDarkTheme
             ) {
                 Scaffold {
                     NavHost(
@@ -110,7 +109,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Route.ProfileScreen.route) {
                             ProfileScreen(navController) {
-                                darkTheme = !darkTheme
+                                viewModel.onEvent(
+                                    MainActivityEvent.ChangeSystemTheme(
+                                        !viewModel.state.value.isSystemInDarkTheme
+                                    )
+                                )
                             }
                         }
                         composable(Route.ProfileResizePhotoScreen.route) {
@@ -131,7 +134,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getByteBuffer(assetManager: AssetManager, path: String) : ByteBuffer{
+    private fun getByteBuffer(assetManager: AssetManager, path: String): ByteBuffer {
         val fd = assetManager.openFd(path)
         val inputStream = FileInputStream(fd.fileDescriptor)
         val channel = inputStream.channel

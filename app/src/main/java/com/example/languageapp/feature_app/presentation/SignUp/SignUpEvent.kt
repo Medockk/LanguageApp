@@ -1,5 +1,7 @@
 package com.example.languageapp.feature_app.presentation.SignUp
 
+import android.app.Activity
+
 sealed class SignUpEvent {
 
     data class EnterFirstName(val value: String) : SignUpEvent()
@@ -15,4 +17,5 @@ sealed class SignUpEvent {
     data object BackClick: SignUpEvent()
     data object SignUpClick: SignUpEvent()
     data object ResetException: SignUpEvent()
+    data class DownloadPolitic(val activity: Activity?): SignUpEvent()
 }
