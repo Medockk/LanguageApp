@@ -9,6 +9,8 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
 
+widjetGlance = "1.1.1"
+
 serializable = "2.0.0"
 serialization = "1.7.3"
 
@@ -40,9 +42,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-#androidx-statusbar = {module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "statusbar"}
 #navigation
 navigation = {module = "androidx.navigation:navigation-compose", version.ref = "navigation"}
+
+#widjet
+widjet-glance = {module = "androidx.glance:glance-appwidget", version.ref = "widjetGlance"}
 
 #viewModel
 view-model = {module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewModel"}

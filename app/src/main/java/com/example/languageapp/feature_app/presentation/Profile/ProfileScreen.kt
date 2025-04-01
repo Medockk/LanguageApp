@@ -45,13 +45,14 @@ import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedi
 fun ProfileScreen(
     navController: NavController,
     viewModel: ProfileViewModel = hiltViewModel(),
-    themeSwitch: () -> Unit,
+    isSystemInDarkTheme : Boolean,
+    changeSystemTheme: () -> Boolean,
 ) {
 
     val state = viewModel.state.value
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-        if (it != null){
+        if (it != null) {
             val stream = context.contentResolver.openInputStream(it)
             val photo = stream?.readBytes()
             Route.ProfileResizePhotoScreen.photo = photo
@@ -61,14 +62,21 @@ fun ProfileScreen(
     }
     val buttonList = listOf(
         listOf(
-            stringResource(R.string.switch_to_dark),
+            if (isSystemInDarkTheme) {
+                stringResource(R.string.switch_to_light)
+            } else {
+                stringResource(R.string.switch_to_dark)
+            },
             {
-                themeSwitch()
+                viewModel.onEvent(ProfileEvent.ChangeSystemTheme(changeSystemTheme()))
             }
         ),
         listOf(
             stringResource(R.string.change_mother_language),
-            {}
+            {
+                Route.LanguageSelectScreen.isAfterSignUpScreen = false
+                navController.navigate(Route.LanguageSelectScreen.route)
+            }
         ),
         listOf(
             stringResource(R.string.change_your_image),
@@ -78,15 +86,15 @@ fun ProfileScreen(
         ),
         listOf(
             stringResource(R.string.logout),
-            {viewModel.onEvent(ProfileEvent.LogOut)}
+            { viewModel.onEvent(ProfileEvent.LogOut) }
         ),
     )
 
     LaunchedEffect(!state.isLogOut) {
-        if (state.isLogOut){
+        if (state.isLogOut) {
             viewModel.onEvent(ProfileEvent.ChangeIsLogOutState)
-            navController.navigate(Route.LoginScreen.route){
-                popUpTo(Route.ProfileScreen.route){
+            navController.navigate(Route.LoginScreen.route) {
+                popUpTo(Route.ProfileScreen.route) {
                     inclusive = true
                 }
             }
@@ -94,14 +102,14 @@ fun ProfileScreen(
     }
 
     BackHandler {
-        navController.navigate(Route.MainScreen.route){
-            popUpTo(Route.ProfileScreen.route){
+        navController.navigate(Route.MainScreen.route) {
+            popUpTo(Route.ProfileScreen.route) {
                 inclusive = true
             }
         }
     }
 
-    if (state.exception.isNotEmpty()){
+    if (state.exception.isNotEmpty()) {
         CustomAlertDialog(state.exception) {
             viewModel.onEvent(ProfileEvent.ResetException)
         }
@@ -116,7 +124,7 @@ fun ProfileScreen(
                     .sizeIn(130.dp, 130.dp)
                     .background(_5BA890, CircleShape),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 AsyncImage(
                     model = state.userImage,
                     contentDescription = null,
@@ -141,7 +149,7 @@ fun ProfileScreen(
     ) {
         Spacer(Modifier.weight(1f))
 
-        repeat(buttonList.size){
+        repeat(buttonList.size) {
             CustomButton(
                 text = buttonList[it][0] as String,
                 modifier = Modifier

@@ -1,5 +1,7 @@
 package com.example.languageapp.feature_app.presentation.Listening
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +48,16 @@ fun ListeningScreen(
 ) {
 
     val state = viewModel.state.value
+    val t = animateDpAsState(
+        targetValue = state.microphoneSize,
+        animationSpec = tween(500)
+    )
+
+    LaunchedEffect(!state.isListening) {
+        if (state.isListening){
+            viewModel.onEvent(ListeningEvent.ChangeMicrophoneSize)
+        }
+    }
 
     CustomScaffold(
         text = stringResource(R.string.listening),
@@ -156,7 +169,7 @@ fun ListeningScreen(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(t.value)
                 )
             }
         }

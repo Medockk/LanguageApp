@@ -9,9 +9,14 @@ import android.speech.SpeechRecognizer
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +33,7 @@ class ListeningViewModel @Inject constructor(
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
         speech.startListening(intent)
 
-        speech.setRecognitionListener(object : RecognitionListener{
+        speech.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 Log.e("speech", "ready")
             }
@@ -64,42 +69,32 @@ class ListeningViewModel @Inject constructor(
                 Log.e("speech", "partial")
             }
 
-            override fun onSegmentResults(segmentResults: Bundle) {
-                super.onSegmentResults(segmentResults)
-                Log.e("speech", "segment")
-            }
-
-            override fun onEndOfSegmentedSession() {
-                super.onEndOfSegmentedSession()
-            }
-
-            override fun onLanguageDetection(results: Bundle) {
-                super.onLanguageDetection(results)
-            }
-
             override fun onEvent(eventType: Int, params: Bundle?) {
                 Log.e("speech", "event")
             }
         })
     }
 
-    fun onEvent(event: ListeningEvent){
-        when (event){
+    fun onEvent(event: ListeningEvent) {
+        when (event) {
             ListeningEvent.ChangeListeningClick -> {
                 _state.value = state.value.copy(
                     isListening = !_state.value.isListening,
                     isRightAnswer = true
                 )
             }
+
             ListeningEvent.CheckMySpeechClick -> {
 
                 _state.value = state.value.copy(
                     isRightAnswer = false,
                 )
             }
+
             ListeningEvent.NextClick -> {
 
             }
+
             ListeningEvent.ResetException -> {
                 _state.value = state.value.copy(exception = "")
             }
@@ -108,6 +103,23 @@ class ListeningViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     userAnswer = event.value
                 )
+            }
+
+            ListeningEvent.ChangeMicrophoneSize -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    while (_state.value.isListening) {
+                        delay(250)
+                        _state.value = state.value.copy(
+                            microphoneSize = if (_state.value.microphoneSize >= 100.dp && _state.value.microphoneSize != 120.dp){
+                                120.dp
+                            }else if (_state.value.microphoneSize <= 120.dp && _state.value.microphoneSize != 100.dp){
+                                100.dp
+                            }else{
+                                100.dp
+                            }
+                        )
+                    }
+                }
             }
         }
     }

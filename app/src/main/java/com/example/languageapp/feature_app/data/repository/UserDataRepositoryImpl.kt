@@ -6,6 +6,7 @@ import com.example.languageapp.feature_app.data.data_source.local.dao.UserDataDa
 import com.example.languageapp.feature_app.data.data_source.remote.Supabase.client
 import com.example.languageapp.feature_app.data.model.UserDataConfigImpl
 import com.example.languageapp.feature_app.data.model.UserDataModelEntity
+import com.example.languageapp.feature_app.domain.model.UserDataConfig
 import com.example.languageapp.feature_app.domain.model.UserDataModel
 import com.example.languageapp.feature_app.domain.repository.UserDataRepository
 import com.example.languageapp.feature_app.domain.utils.NetworkResult
@@ -22,16 +23,37 @@ class UserDataRepositoryImpl(
     private val userConfigDao: UserConfigDao
 ) : UserDataRepository {
 
-    override suspend fun upsertUserConfig(systemTheme: Boolean) {
-        val userID = getUserId()
-
-        userConfigDao.upsertConfig(UserDataConfigImpl(userID = userID, isSystemInDarkTheme = systemTheme))
+    override suspend fun clearUserDataAndConfig() {
+        userConfigDao.clearUserConfig()
+        userDataDao.clearData()
     }
 
-    override suspend fun getUserConfig() = flow<NetworkResult<UserDataConfigImpl>> {
+    override suspend fun upsertUserConfig(
+        isSystemInDarkTheme: Boolean?,
+        systemLanguage: String?,
+    ) {
+        Log.e("s", userConfigDao.getUserConfig().toString())
+        userConfigDao.upsertConfig(
+            UserDataConfigImpl(
+                isSystemInDarkTheme = isSystemInDarkTheme
+                    ?: (userConfigDao.getUserConfig()?.isSystemInDarkTheme ?: false),
+                language = systemLanguage ?: (userConfigDao.getUserConfig()?.language ?: "en")
+            )
+        )
+        Log.e("s", isSystemInDarkTheme.toString())
+        Log.e("s", userConfigDao.getUserConfig().toString())
+    }
 
-        val userID = getUserId()
-        emit(NetworkResult.Success(userConfigDao.getUserConfig(userID)))
+    override suspend fun getUserConfig() = flow<NetworkResult<UserDataConfig>> {
+
+        if (userConfigDao.getUserConfig() == null) {
+            userConfigDao.upsertConfig(
+                UserDataConfigImpl(
+                    0, "", isSystemInDarkTheme = false
+                )
+            )
+        }
+        emit(NetworkResult.Success(userConfigDao.getUserConfig()))
     }
 
     override suspend fun getUserData(): Flow<NetworkResult<UserDataModel>> {
@@ -42,16 +64,25 @@ class UserDataRepositoryImpl(
             emit(NetworkResult.Loading())
             emit(NetworkResult.Success(userDataDao.getUserData(userID)))
 
-            val data = client.postgrest["Users"].select {
-                filter {
-                    eq("userID", userID)
-                }
-            }.decodeSingle<UserDataModelEntity>()
+            Log.e("ex", "before supa")
+            var data: UserDataModelEntity? = null
+            try {
+                data = client.postgrest["Users"].select {
+                    filter {
+                        eq("userID", userID)
+                    }
+                }.decodeSingle<UserDataModelEntity>()
+            } catch (e: Exception) {
+                Log.e("ex", "supa exeption ${e.message.toString()}")
+            }
+            Log.e("ex", "after supa")
 
             emit(NetworkResult.Success(data))
-            userDataDao.upsertData(data)
+            if (data != null) {
+                userDataDao.upsertData(data)
+            }
         }.catch {
-            Log.e("ex", "flow catch")
+            Log.e("ex", it.message.toString())
             emit(NetworkResult.Error(it.localizedMessage))
         }
     }

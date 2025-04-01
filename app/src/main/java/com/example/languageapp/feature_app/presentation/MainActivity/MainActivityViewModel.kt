@@ -16,52 +16,60 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val getUserConfigUseCase: GetUserConfigUseCase,
-    private val updateUserConfigUseCase: UpsertUserConfigUseCase
+    private val upsertUserConfigUseCase: UpsertUserConfigUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(MainActivityState())
     val state: State<MainActivityState> = _state
 
-    fun onEvent(event: MainActivityEvent){
-        when (event){
+    init {
+        viewModelScope.launch(Dispatchers.Main) {
+            getUserConfig()
+        }
+    }
+
+    fun onEvent(event: MainActivityEvent) {
+        when (event) {
             is MainActivityEvent.ChangeSystemLanguage -> {
                 _state.value = state.value.copy(
                     systemLanguage = event.value
                 )
             }
+
             is MainActivityEvent.ChangeSystemTheme -> {
                 _state.value = state.value.copy(
                     isSystemInDarkTheme = event.value
                 )
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    updateUserConfigUseCase(event.value)
+                    upsertUserConfigUseCase(event.value)
                 }
             }
 
             MainActivityEvent.GetUserConfig -> {
                 viewModelScope.launch(Dispatchers.IO) {
-
-                    try {
-                        getUserConfigUseCase().collect { config ->
-                            when (config){
-                                is NetworkResult.Error<*> -> {}
-                                is NetworkResult.Loading<*> -> {}
-                                is NetworkResult.Success<*> -> {
-                                    withContext(Dispatchers.Main){
-                                        _state.value = state.value.copy(
-                                            isSystemInDarkTheme = config.data?.isSystemInDarkTheme ?: false,
-                                            systemLanguage = config.data?.language ?: "en"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    } catch (_: Exception) {
-
-                    }
+                    getUserConfig()
                 }
             }
         }
+    }
+
+    private suspend fun getUserConfig() {
+        try {
+            getUserConfigUseCase().collect { config ->
+                when (config) {
+                    is NetworkResult.Error<*> -> {}
+                    is NetworkResult.Loading<*> -> {}
+                    is NetworkResult.Success<*> -> {
+                        withContext(Dispatchers.Main) {
+                            _state.value = state.value.copy(
+                                isSystemInDarkTheme = config.data?.isSystemInDarkTheme ?: false,
+                                systemLanguage = config.data?.language ?: "en"
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (_: Exception) {  }
     }
 }

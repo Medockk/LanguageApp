@@ -11,7 +11,7 @@ import java.util.Locale
 @Serializable
 @Entity
 data class UserDataModelEntity(
-    @PrimaryKey(true)  override val id: Int,
+    @PrimaryKey override val id: Int = 0,
     @ColumnInfo(defaultValue = "") override val userID: String,
     @ColumnInfo(defaultValue = "") override val firstName: String,
     @ColumnInfo(defaultValue = "") override val lastName: String,
@@ -20,8 +20,8 @@ data class UserDataModelEntity(
 
 @Entity
 data class UserDataConfigImpl(
-    @PrimaryKey(true) override val id: Int? = null,
-    @ColumnInfo(defaultValue = "") override val userID: String,
+    @PrimaryKey override val id: Int = 0,
+    @ColumnInfo(defaultValue = "") override val userID: String = "",
     @ColumnInfo(defaultValue = "") override val language: String = Locale.getDefault().language,
     @ColumnInfo(defaultValue = "") override val isSystemInDarkTheme: Boolean,
 ) : UserDataConfig

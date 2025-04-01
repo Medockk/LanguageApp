@@ -5,14 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -61,27 +61,27 @@ class MainActivity : ComponentActivity() {
 //            }
 
             val viewModel: MainActivityViewModel = hiltViewModel()
-            val isSystemInDarkTheme = isSystemInDarkTheme()
+            val state = viewModel.state.value
 
-            LaunchedEffect(Unit) {
-                viewModel.onEvent(MainActivityEvent.ChangeSystemTheme(isSystemInDarkTheme))
-            }
+            viewModel.onEvent(MainActivityEvent.GetUserConfig)
+
             this.window.statusBarColor = primaryColor.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
 
             val navController = rememberNavController()
             LanguageAppTheme(
                 dynamicColor = false,
-                darkTheme = viewModel.state.value.isSystemInDarkTheme
+                darkTheme = state.isSystemInDarkTheme
             ) {
                 Scaffold {
                     NavHost(
                         navController,
                         startDestination = Route.SplashScreen.route,
                         enterTransition = {
-                            fadeIn(tween(500))
+                            fadeIn(tween(750, easing = LinearOutSlowInEasing))
                         },
                         exitTransition = {
-                            fadeOut(tween(500))
+                            fadeOut(tween(750, easing = LinearOutSlowInEasing))
                         },
                         modifier = Modifier
                             .padding(it)
@@ -108,12 +108,16 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController)
                         }
                         composable(Route.ProfileScreen.route) {
-                            ProfileScreen(navController) {
+                            ProfileScreen(
+                                navController,
+                                isSystemInDarkTheme = state.isSystemInDarkTheme
+                            ) {
                                 viewModel.onEvent(
                                     MainActivityEvent.ChangeSystemTheme(
-                                        !viewModel.state.value.isSystemInDarkTheme
+                                        !state.isSystemInDarkTheme
                                     )
                                 )
+                                state.isSystemInDarkTheme
                             }
                         }
                         composable(Route.ProfileResizePhotoScreen.route) {

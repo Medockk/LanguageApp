@@ -44,7 +44,7 @@ class LoginViewModel @Inject constructor(
                 if (
                     Patterns.EMAIL_ADDRESS.matcher(_state.value.email).matches() &&
                     _state.value.password.isNotBlank() &&
-                    _state.value.password.length >= 6
+                    _state.value.password.length >= 8
                 ){
                     viewModelScope.launch(Dispatchers.IO) {
                         _state.value = state.value.copy(showIndicator = true)

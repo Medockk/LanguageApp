@@ -1,6 +1,8 @@
 package com.example.languageapp.feature_app.presentation.OnBoard
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -57,7 +59,7 @@ fun OnBoardScreen(
 
     LaunchedEffect(!state.isComplete) {
         if (state.isComplete) {
-            navController.navigate(Route.LoginScreen.route){
+            navController.navigate(Route.LanguageSelectScreen.route){
                 popUpTo(Route.OnBoardScreen.route){
                     inclusive = true
                 }
@@ -79,6 +81,7 @@ fun OnBoardScreen(
     ) {
         Crossfade(
             targetState = state.currentPage,
+            animationSpec = tween(750, easing = LinearOutSlowInEasing)
         ) { page ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -7,6 +7,7 @@ import com.example.languageapp.feature_app.data.data_source.local.database.UserD
 import com.example.languageapp.feature_app.data.data_source.local.database.UserDataDatabase
 import com.example.languageapp.feature_app.data.repository.UserDataRepositoryImpl
 import com.example.languageapp.feature_app.domain.repository.UserDataRepository
+import com.example.languageapp.feature_app.domain.use_case.UserData.ClearUserDataAndConfigUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserConfigUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.UpdateAvatarUseCase
@@ -59,5 +60,10 @@ object UserDataModule {
     @Singleton
     fun updateUserConfig(userDataRepository: UserDataRepository) : UpsertUserConfigUseCase{
         return UpsertUserConfigUseCase(userDataRepository)
+    }
+    @Provides
+    @Singleton
+    fun clearDataAndConfig(userDataRepository: UserDataRepository) : ClearUserDataAndConfigUseCase{
+        return ClearUserDataAndConfigUseCase(userDataRepository)
     }
 }

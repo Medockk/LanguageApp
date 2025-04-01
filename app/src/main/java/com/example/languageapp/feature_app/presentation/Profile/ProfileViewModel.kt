@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.languageapp.feature_app.domain.use_case.Auth.SignOutUseCase
+import com.example.languageapp.feature_app.domain.use_case.UserData.ClearUserDataAndConfigUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataUseCase
+import com.example.languageapp.feature_app.domain.use_case.UserData.UpsertUserConfigUseCase
 import com.example.languageapp.feature_app.domain.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.exceptions.HttpRequestException
@@ -17,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val signOutUseCase: SignOutUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val upsertUserConfigUseCase: UpsertUserConfigUseCase,
+    private val clearUserDataAndConfigUseCase: ClearUserDataAndConfigUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProfileState())
@@ -64,6 +68,7 @@ class ProfileViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
                         signOutUseCase()
+                        clearUserDataAndConfigUseCase()
                         _state.value = state.value.copy(
                             isLogOut = true
                         )
@@ -89,6 +94,10 @@ class ProfileViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     isLogOut = false
                 )
+            }
+
+            is ProfileEvent.ChangeSystemTheme -> {
+
             }
         }
     }

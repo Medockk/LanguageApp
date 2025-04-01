@@ -73,4 +73,5 @@
     <string name="are_you_ready_for_learning_today">Вы готовы учиться сегодня?</string>
     <string name="top_users">Лучшие пользователи</string>
     <string name="available_excersises">Доступные упражнения</string>
+    <string name="switch_to_light">Поменять на светлый</string>
 </resources>

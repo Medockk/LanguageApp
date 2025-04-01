@@ -26,6 +26,9 @@ interface UserConfigDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsertConfig(userDataConfig: UserDataConfigImpl)
 
-    @Query("SELECT * FROM UserDataConfigImpl WHERE userID =:userID")
-    fun getUserConfig(userID: String) : UserDataConfigImpl
+    @Query("SELECT * FROM UserDataConfigImpl WHERE userID =:userID OR id =:id")
+    fun getUserConfig(userID: String = "", id: Int = 0) : UserDataConfigImpl?
+
+    @Query("DELETE FROM UserDataConfigImpl")
+    fun clearUserConfig()
 }

@@ -86,7 +86,7 @@ class SignUpViewModel @Inject constructor(
                 if (
                     Patterns.EMAIL_ADDRESS.matcher(_state.value.email).matches() &&
                     _state.value.password.isNotBlank() &&
-                    _state.value.password.length >= 6 &&
+                    _state.value.password.length >= 8 &&
                     _state.value.password == _state.value.confirmPassword &&
                     isStrongPassword(_state.value.password) &&
                     _state.value.firstName.isNotBlank() &&

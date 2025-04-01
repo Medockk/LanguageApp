@@ -1,5 +1,7 @@
 package com.example.languageapp.feature_app.presentation.LanguageSelect
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +27,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.languageapp.R
 import com.example.languageapp.feature_app.presentation.Route
@@ -39,7 +41,7 @@ import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedi
 @Composable
 fun LanguageSelectScreen(
     navController: NavController,
-    viewModel: LanguageSelectViewModel = viewModel()
+    viewModel: LanguageSelectViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     val locale = Locale.current
@@ -74,14 +76,36 @@ fun LanguageSelectScreen(
                 .fillMaxSize()
                 .padding(horizontal = 25.dp)
         ) {
-            items(state.languageList.sortedBy { it != state.motherLanguage }){
+            items(
+                state.languageList.sortedBy { it != state.motherLanguage },
+                key = { it }) {
                 Card(
                     modifier = Modifier
                         .fillParentMaxWidth()
                         .heightIn(min = 65.dp)
-                        .animateItem(),
-                    colors = CardDefaults.cardColors(if (it == state.motherLanguage) _F76400 else _FFF6EB),
+                        .animateItem(
+                            fadeInSpec = spring(
+                                Spring.DampingRatioMediumBouncy,
+                                Spring.StiffnessVeryLow
+                            )
+                        ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (it == state.motherLanguage) {
+                            _F76400
+                        } else {
+                            _FFF6EB
+                        },
+                        disabledContainerColor = if (it == state.motherLanguage) {
+                            _F76400
+                        } else {
+                            _FFF6EB
+                        },
+                    ),
                     shape = RoundedCornerShape(20.dp),
+                    onClick = {
+                        viewModel.onEvent(LanguageSelectEvent.SelectLanguage(it))
+                    },
+                    enabled = !Route.LanguageSelectScreen.isAfterSignUpScreen
                 ) {
                     Text(
                         text = stringResource(it),
@@ -102,7 +126,7 @@ fun LanguageSelectScreen(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
-    ){
+    ) {
         CustomButton(
             text = stringResource(R.string.choose),
             modifier = Modifier
@@ -110,8 +134,8 @@ fun LanguageSelectScreen(
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
-            navController.navigate(Route.MainScreen.route){
-                popUpTo(Route.LanguageSelectScreen.route){
+            navController.navigate(Route.MainScreen.route) {
+                popUpTo(Route.LanguageSelectScreen.route) {
                     inclusive = true
                 }
             }
