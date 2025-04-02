@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserConfigUseCase
+import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.UpsertUserConfigUseCase
 import com.example.languageapp.feature_app.domain.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
+    private val getUserDataUseCase: GetUserDataUseCase,
     private val getUserConfigUseCase: GetUserConfigUseCase,
     private val upsertUserConfigUseCase: UpsertUserConfigUseCase
 ) : ViewModel() {
@@ -23,8 +25,25 @@ class MainActivityViewModel @Inject constructor(
     val state: State<MainActivityState> = _state
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
+            getUserData()
             getUserConfig()
+        }
+    }
+
+    private suspend fun getUserData() {
+        getUserDataUseCase().collect {
+            when (it){
+                is NetworkResult.Error<*> -> {}
+                is NetworkResult.Loading<*> -> {}
+                is NetworkResult.Success<*> -> {
+                    withContext(Dispatchers.Main){
+                        _state.value = state.value.copy(
+                            isUserDataNotEmpty = true
+                        )
+                    }
+                }
+            }
         }
     }
 

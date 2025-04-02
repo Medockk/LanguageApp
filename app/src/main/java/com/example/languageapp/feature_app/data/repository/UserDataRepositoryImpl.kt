@@ -1,6 +1,5 @@
 package com.example.languageapp.feature_app.data.repository
 
-import android.util.Log
 import com.example.languageapp.feature_app.data.data_source.local.dao.UserConfigDao
 import com.example.languageapp.feature_app.data.data_source.local.dao.UserDataDao
 import com.example.languageapp.feature_app.data.data_source.remote.Supabase.client
@@ -23,6 +22,71 @@ class UserDataRepositoryImpl(
     private val userConfigDao: UserConfigDao
 ) : UserDataRepository {
 
+    override suspend fun upsertUserScore(score: String) {
+        userDataDao.upsertData(userDataDao.getUserData()!!.copy(score = score))
+
+        val userID = userDataDao.getUserData()?.userID ?: getUserId()
+        client.postgrest["Users"].update(
+            mapOf(
+                "score" to score
+            )
+        ) {
+            filter { eq("userID", userID) }
+        }
+    }
+
+    override suspend fun getTopUsers(): Flow<NetworkResult<List<UserDataModel>>> {
+
+        val userID = userDataDao.getUserData()?.userID ?: getUserId()
+
+        return flow<NetworkResult<List<UserDataModel>>> {
+            emit(NetworkResult.Loading())
+
+            val remoteUserPositionDate = client.postgrest["Users"].select {
+                filter { eq("userID", userID) }
+            }.decodeSingle<UserDataModelEntity>()
+            val topUsers = client.postgrest["Users"].select {
+                limit(3)
+                filter {
+                    gt("score", remoteUserPositionDate.score)
+                    gte("score", remoteUserPositionDate.score)
+                }
+            }.decodeList<UserDataModelEntity>()
+
+            val topList = ArrayList<UserDataModel>()
+            for (i in 0 until if (topUsers.size > 3) 3 else topUsers.size) {
+                topList.add(topUsers[i])
+            }
+            topList.add(remoteUserPositionDate)
+
+
+            emit(NetworkResult.Success(topList))
+            userDataDao.upsertData(remoteUserPositionDate)
+
+        }.catch {
+            emit(NetworkResult.Error(it.localizedMessage))
+        }
+    }
+
+    override suspend fun getUserScore(): Flow<NetworkResult<UserDataModel>> {
+
+        val userID = userDataDao.getUserData()?.userID ?: getUserId()
+
+        return flow<NetworkResult<UserDataModel>> {
+            emit(NetworkResult.Loading())
+            emit(NetworkResult.Success(userDataDao.getUserData()))
+
+            val remoteData = client.postgrest["Users"].select {
+                filter { eq("userID", userID) }
+            }.decodeSingle<UserDataModelEntity>()
+            emit(NetworkResult.Success(remoteData))
+
+            userDataDao.upsertData(remoteData)
+        }.catch {
+            emit(NetworkResult.Error(it.localizedMessage))
+        }
+    }
+
     override suspend fun clearUserDataAndConfig() {
         userConfigDao.clearUserConfig()
         userDataDao.clearData()
@@ -32,7 +96,6 @@ class UserDataRepositoryImpl(
         isSystemInDarkTheme: Boolean?,
         systemLanguage: String?,
     ) {
-        Log.e("s", userConfigDao.getUserConfig().toString())
         userConfigDao.upsertConfig(
             UserDataConfigImpl(
                 isSystemInDarkTheme = isSystemInDarkTheme
@@ -40,8 +103,6 @@ class UserDataRepositoryImpl(
                 language = systemLanguage ?: (userConfigDao.getUserConfig()?.language ?: "en")
             )
         )
-        Log.e("s", isSystemInDarkTheme.toString())
-        Log.e("s", userConfigDao.getUserConfig().toString())
     }
 
     override suspend fun getUserConfig() = flow<NetworkResult<UserDataConfig>> {
@@ -58,13 +119,12 @@ class UserDataRepositoryImpl(
 
     override suspend fun getUserData(): Flow<NetworkResult<UserDataModel>> {
 
-        val userID = getUserId()
+        val userID = userDataDao.getUserData()?.userID ?: getUserId()
         return flow<NetworkResult<UserDataModel>> {
 
             emit(NetworkResult.Loading())
             emit(NetworkResult.Success(userDataDao.getUserData(userID)))
 
-            Log.e("ex", "before supa")
             var data: UserDataModelEntity? = null
             try {
                 data = client.postgrest["Users"].select {
@@ -72,17 +132,15 @@ class UserDataRepositoryImpl(
                         eq("userID", userID)
                     }
                 }.decodeSingle<UserDataModelEntity>()
-            } catch (e: Exception) {
-                Log.e("ex", "supa exeption ${e.message.toString()}")
+            } catch (_: Exception) {
+
             }
-            Log.e("ex", "after supa")
 
             emit(NetworkResult.Success(data))
             if (data != null) {
                 userDataDao.upsertData(data)
             }
         }.catch {
-            Log.e("ex", it.message.toString())
             emit(NetworkResult.Error(it.localizedMessage))
         }
     }
@@ -90,7 +148,7 @@ class UserDataRepositoryImpl(
 
     override suspend fun updateAvatar(byteArray: ByteArray) {
 
-        val userId = getUserId()
+        val userId = userDataDao.getUserData()?.userID ?: getUserId()
 
         val bucket = client.storage.from("avatars")
         bucket.update(
@@ -100,7 +158,7 @@ class UserDataRepositoryImpl(
             upsert = true
         }
         val url = bucket.createSignedUrl(userId, Duration.INFINITE)
-        userDataDao.upsertData(userDataDao.getUserData(userId).copy(avatar = url))
+        userDataDao.upsertData(userDataDao.getUserData(userId)!!.copy(avatar = url))
         client.postgrest["Users"].update(
             mapOf(
                 "avatar" to url

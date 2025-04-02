@@ -6,6 +6,7 @@ interface UserDataModel{
     val firstName: String
     val lastName: String
     val avatar: String
+    val score: String
 }
 
 interface UserDataConfig {

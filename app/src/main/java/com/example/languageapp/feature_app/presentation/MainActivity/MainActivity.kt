@@ -1,6 +1,5 @@
 package com.example.languageapp.feature_app.presentation.MainActivity
 
-import android.content.res.AssetManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -34,9 +34,6 @@ import com.example.languageapp.feature_app.presentation.WordPractice.WordPractic
 import com.example.languageapp.feature_app.presentation.ui.theme.LanguageAppTheme
 import com.example.languageapp.feature_app.presentation.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.FileInputStream
-import java.nio.ByteBuffer
-import java.nio.channels.FileChannel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -69,6 +66,12 @@ class MainActivity : ComponentActivity() {
             window.navigationBarColor = Color.Transparent.toArgb()
 
             val navController = rememberNavController()
+            LaunchedEffect(!state.isUserDataNotEmpty) {
+                if (state.isUserDataNotEmpty){
+                    navController.navigate(Route.MainScreen.route)
+                }
+            }
+
             LanguageAppTheme(
                 dynamicColor = false,
                 darkTheme = state.isSystemInDarkTheme
@@ -138,13 +141,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getByteBuffer(assetManager: AssetManager, path: String): ByteBuffer {
-        val fd = assetManager.openFd(path)
-        val inputStream = FileInputStream(fd.fileDescriptor)
-        val channel = inputStream.channel
-        val startOffset = fd.startOffset
-        val declaredLength = fd.declaredLength
-
-        return channel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-    }
+//    private fun getByteBuffer(assetManager: AssetManager, path: String): ByteBuffer {
+//        val fd = assetManager.openFd(path)
+//        val inputStream = FileInputStream(fd.fileDescriptor)
+//        val channel = inputStream.channel
+//        val startOffset = fd.startOffset
+//        val declaredLength = fd.declaredLength
+//
+//        return channel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+//    }
 }

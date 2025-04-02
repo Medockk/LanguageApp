@@ -13,4 +13,8 @@ interface UserDataRepository {
     suspend fun getUserConfig() : Flow<NetworkResult<UserDataConfig>>
     suspend fun upsertUserConfig(isSystemInDarkTheme: Boolean?, systemLanguage: String?)
     suspend fun clearUserDataAndConfig()
+
+    suspend fun getTopUsers() : Flow<NetworkResult<List<UserDataModel>>>
+    suspend fun getUserScore() : Flow<NetworkResult<UserDataModel>>
+    suspend fun upsertUserScore(score: String)
 }

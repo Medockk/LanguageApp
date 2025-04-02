@@ -103,13 +103,14 @@ fun MainScreen(
 
     CustomScaffoldWithLargeTopAppBar(
         topAppBarContent = {
-            Box(Modifier
-                .padding(start = 25.dp)
-                .size(55.dp)
-                .background(_D9D9D9, CircleShape)
-                .clickable {
-                    navController.navigate(Route.ProfileScreen.route)
-                }) {
+            Box(
+                Modifier
+                    .padding(start = 25.dp)
+                    .size(55.dp)
+                    .background(_D9D9D9, CircleShape)
+                    .clickable {
+                        navController.navigate(Route.ProfileScreen.route)
+                    }) {
                 AsyncImage(
                     model = state.userImage,
                     contentDescription = null,
@@ -121,7 +122,7 @@ fun MainScreen(
             }
             Spacer(Modifier.height(5.dp))
             Text(
-                text = stringResource(R.string.Hello) +", ${state.userName}",
+                text = stringResource(R.string.Hello) + ", ${state.userName}",
                 fontFamily = fontFredokaMedium,
                 fontWeight = FontWeight(500),
                 fontSize = 22.sp,
@@ -159,14 +160,15 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(horizontal = 25.dp)
         ) {
-            items(state.topUserList) {
+            items(state.topUserList.sortedBy { it.score.toInt() }.reversed()) {
                 CustomTopUserCard(
-                    userIcon = it.userIcon,
-                    userName = it.userName,
-                    userPoints = it.userPoint,
+                    userIcon = it.avatar,
+                    userName = it.firstName + " " + it.lastName,
+                    userPoints = it.score,
                     modifier = Modifier
                         .fillParentMaxWidth()
                 )
+                Spacer(Modifier.height(10.dp))
             }
             item {
                 Text(

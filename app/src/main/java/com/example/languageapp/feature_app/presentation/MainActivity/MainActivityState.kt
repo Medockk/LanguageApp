@@ -4,4 +4,6 @@ data class MainActivityState(
     val isSystemInDarkTheme: Boolean = false,
     val systemLanguage: String = "en",
     val isLoadedFromDatabase: Boolean = false,
+
+    val isUserDataNotEmpty: Boolean = false,
 )

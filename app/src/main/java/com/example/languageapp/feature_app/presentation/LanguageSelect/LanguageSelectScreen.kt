@@ -134,9 +134,17 @@ fun LanguageSelectScreen(
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
-            navController.navigate(Route.MainScreen.route) {
-                popUpTo(Route.LanguageSelectScreen.route) {
-                    inclusive = true
+            if (Route.LanguageSelectScreen.isAfterSignUpScreen){
+                navController.navigate(Route.LoginScreen.route) {
+                    popUpTo(Route.LanguageSelectScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }else{
+                navController.navigate(Route.MainScreen.route) {
+                    popUpTo(Route.LanguageSelectScreen.route) {
+                        inclusive = true
+                    }
                 }
             }
         }

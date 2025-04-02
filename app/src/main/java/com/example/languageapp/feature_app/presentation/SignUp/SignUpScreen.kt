@@ -104,7 +104,7 @@ fun SignUpScreen(
 
     LaunchedEffect(!state.isComplete) {
         if (state.isComplete) {
-            navController.navigate(Route.LanguageSelectScreen.route) {
+            navController.navigate(Route.MainScreen.route) {
                 popUpTo(Route.SignUpScreen.route) {
                     inclusive = true
                 }

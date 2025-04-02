@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -48,6 +49,7 @@ fun CustomTopUserCard(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(35.dp, 25.dp)
+                    .clip(RoundedCornerShape(5.dp))
             )
             Spacer(Modifier.width(25.dp))
             Text(
@@ -63,7 +65,7 @@ fun CustomTopUserCard(
             )
             Spacer(Modifier.width(25.dp))
             Text(
-                text = userPoints + stringResource(R.string.points),
+                text = userPoints + " " + stringResource(R.string.points),
                 fontFamily = fontFredokaBold,
                 fontWeight = FontWeight(500),
                 fontSize = 17.sp,

@@ -15,7 +15,8 @@ data class UserDataModelEntity(
     @ColumnInfo(defaultValue = "") override val userID: String,
     @ColumnInfo(defaultValue = "") override val firstName: String,
     @ColumnInfo(defaultValue = "") override val lastName: String,
-    @ColumnInfo(defaultValue = "") override val avatar: String
+    @ColumnInfo(defaultValue = "") override val avatar: String,
+    @ColumnInfo(defaultValue = "") override val score: String = "0"
 ) : UserDataModel
 
 @Entity

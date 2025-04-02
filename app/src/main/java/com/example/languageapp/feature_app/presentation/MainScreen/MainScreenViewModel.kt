@@ -1,9 +1,11 @@
 package com.example.languageapp.feature_app.presentation.MainScreen
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.languageapp.feature_app.domain.use_case.UserData.GetTopUsersUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataUseCase
 import com.example.languageapp.feature_app.domain.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val getTopUsersUseCase: GetTopUsersUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(MainScreenState())
@@ -24,10 +27,39 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 getUserData()
+                getTopUsers()
             } catch (e: Exception) {
                 _state.value = state.value.copy(
                     exception = e.message.toString()
                 )
+            }
+        }
+    }
+
+    private suspend fun getTopUsers() {
+
+        getTopUsersUseCase().collect {
+            when (it){
+                is NetworkResult.Error<*> -> {
+                    _state.value = state.value.copy(
+                        showIndicator = false,
+                        exception = it.message ?: "Unknown error"
+                    )
+                }
+                is NetworkResult.Loading<*> -> {
+                    _state.value = state.value.copy(
+                        showIndicator = false
+                    )
+                }
+                is NetworkResult.Success<*> -> {
+                    withContext(Dispatchers.Main){
+                        _state.value = state.value.copy(
+                            showIndicator = false,
+                            topUserList = it.data ?: emptyList()
+                        )
+                        Log.e("top", it.data.toString())
+                    }
+                }
             }
         }
     }

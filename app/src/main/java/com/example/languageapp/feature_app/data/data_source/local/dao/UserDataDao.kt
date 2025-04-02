@@ -14,7 +14,7 @@ interface UserDataDao {
     fun upsertData(userDataModelEntity: UserDataModelEntity)
 
     @Query("SELECT * FROM UserDataModelEntity WHERE userID =:userId")
-    fun getUserData(userId: String) : UserDataModelEntity
+    fun getUserData(userId: String = "") : UserDataModelEntity?
 
     @Query("DELETE FROM UserDataModelEntity")
     fun clearData()

@@ -42,9 +42,6 @@ android {
     buildFeatures {
         compose = true
     }
-    androidResources {
-        noCompress.add("tflite")
-    }
 }
 
 dependencies {
@@ -77,7 +74,7 @@ dependencies {
     implementation(libs.hilt.navigation)
 
     //tensorLite
-    implementation(libs.tensor.lite)
+    //implementation(libs.tensor.lite)
 
     //widjet
     implementation(libs.widjet.glance)
