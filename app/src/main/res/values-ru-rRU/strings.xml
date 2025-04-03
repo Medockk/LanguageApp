@@ -74,4 +74,5 @@
     <string name="top_users">Лучшие пользователи</string>
     <string name="available_excersises">Доступные упражнения</string>
     <string name="switch_to_light">Поменять на светлый</string>
+    <string name="start_activity">Запуск!</string>
 </resources>

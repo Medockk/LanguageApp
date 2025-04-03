@@ -1,23 +1,19 @@
 package com.example.languageapp.feature_app.presentation.common
 
 import android.content.Context
-import androidx.compose.ui.graphics.Color
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.glance.Button
 import androidx.glance.GlanceId
+import androidx.glance.GlanceModifier
+import androidx.glance.action.actionStartActivity
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.provideContent
-import androidx.glance.currentState
 import androidx.glance.layout.Column
+import androidx.glance.layout.fillMaxWidth
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import androidx.glance.text.Text
-import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
+import com.example.languageapp.R
+import com.example.languageapp.feature_app.presentation.MainActivity.MainActivity
 
-private val _id = longPreferencesKey("id")
-private val _userPosition = stringPreferencesKey("position")
 
 class Widget : GlanceAppWidget() {
 
@@ -25,11 +21,11 @@ class Widget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            val pref = currentState<Preferences>()
             Column {
-                Text(
-                    text = (pref[_id] ?: Long.MIN_VALUE).toString(),
-                    style = TextStyle(color = ColorProvider(Color.White))
+                Button(
+                    text = context.getString(R.string.start_activity),
+                    onClick = actionStartActivity<MainActivity>(),
+                    modifier = GlanceModifier.fillMaxWidth()
                 )
             }
         }

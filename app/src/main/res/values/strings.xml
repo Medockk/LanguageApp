@@ -73,4 +73,5 @@
     <string name="top_users">Top users</string>
     <string name="available_excersises">Available excersises</string>
     <string name="switch_to_light">Switch to Light</string>
+    <string name="start_activity">start activity</string>
 </resources>

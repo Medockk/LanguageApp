@@ -55,6 +55,6 @@ class ProfileResizePhotoViewModel @Inject constructor(
     }
 
     private fun ByteArray.toBitmap() : Bitmap{
-        return BitmapFactory.decodeByteArray(this, 0, this.size)
+        return BitmapFactory.decodeByteArray(this, 0, this.size, BitmapFactory.Options())
     }
 }

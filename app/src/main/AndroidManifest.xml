@@ -34,6 +34,7 @@
             </intent-filter>
         </activity>
 
+
         <receiver
             android:name=".feature_app.presentation.common.WidgetReceiver"
             android:exported="true">

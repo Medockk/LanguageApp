@@ -6,4 +6,5 @@ data class MainActivityState(
     val isLoadedFromDatabase: Boolean = false,
 
     val isUserDataNotEmpty: Boolean = false,
+    val haveConnection: Boolean = true,
 )

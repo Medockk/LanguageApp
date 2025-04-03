@@ -1,5 +1,8 @@
 package com.example.languageapp.feature_app.presentation.MainActivity
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,7 +12,9 @@ import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataU
 import com.example.languageapp.feature_app.domain.use_case.UserData.UpsertUserConfigUseCase
 import com.example.languageapp.feature_app.domain.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,7 +23,8 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val getUserConfigUseCase: GetUserConfigUseCase,
-    private val upsertUserConfigUseCase: UpsertUserConfigUseCase
+    private val upsertUserConfigUseCase: UpsertUserConfigUseCase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _state = mutableStateOf(MainActivityState())
@@ -29,15 +35,38 @@ class MainActivityViewModel @Inject constructor(
             getUserData()
             getUserConfig()
         }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                checkConnection()
+            } catch (_: Exception) {
+
+            }
+        }
+    }
+
+    private suspend fun checkConnection() {
+        while (true) {
+            val network =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val info = network.activeNetworkInfo
+
+            withContext(Dispatchers.Main) {
+                _state.value = state.value.copy(
+                    haveConnection = info?.isConnected ?: false
+                )
+            }
+
+            delay(5000)
+        }
     }
 
     private suspend fun getUserData() {
         getUserDataUseCase().collect {
-            when (it){
+            when (it) {
                 is NetworkResult.Error<*> -> {}
                 is NetworkResult.Loading<*> -> {}
                 is NetworkResult.Success<*> -> {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         _state.value = state.value.copy(
                             isUserDataNotEmpty = true
                         )
@@ -89,6 +118,7 @@ class MainActivityViewModel @Inject constructor(
                     }
                 }
             }
-        } catch (_: Exception) {  }
+        } catch (_: Exception) {
+        }
     }
 }

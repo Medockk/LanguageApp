@@ -1,6 +1,5 @@
 package com.example.languageapp.feature_app.presentation.MainScreen
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -39,25 +38,26 @@ class MainScreenViewModel @Inject constructor(
     private suspend fun getTopUsers() {
 
         getTopUsersUseCase().collect {
-            when (it){
+            when (it) {
                 is NetworkResult.Error<*> -> {
                     _state.value = state.value.copy(
                         showIndicator = false,
                         exception = it.message ?: "Unknown error"
                     )
                 }
+
                 is NetworkResult.Loading<*> -> {
                     _state.value = state.value.copy(
-                        showIndicator = false
+                        showIndicator = true
                     )
                 }
+
                 is NetworkResult.Success<*> -> {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         _state.value = state.value.copy(
-                            showIndicator = false,
-                            topUserList = it.data ?: emptyList()
+                            topUserList = _state.value.topUserList + (it.data ?: emptyList()),
+                            showIndicator = false
                         )
-                        Log.e("top", it.data.toString())
                     }
                 }
             }
@@ -65,21 +65,23 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private suspend fun getUserData() {
-        getUserDataUseCase().collect{
-            when (it){
+        getUserDataUseCase().collect {
+            when (it) {
                 is NetworkResult.Error<*> -> {
                     _state.value = state.value.copy(
                         showIndicator = false,
                         exception = it.message ?: "Unknown error"
                     )
                 }
+
                 is NetworkResult.Loading<*> -> {
                     _state.value = state.value.copy(
                         showIndicator = true
                     )
                 }
+
                 is NetworkResult.Success<*> -> {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         _state.value = state.value.copy(
                             userImage = it.data?.avatar ?: "",
                             userName = (it.data?.firstName ?: "") + " " + (it.data?.lastName ?: ""),
@@ -91,8 +93,8 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: MainScreenEvent){
-        when (event){
+    fun onEvent(event: MainScreenEvent) {
+        when (event) {
             MainScreenEvent.ResetException -> {
                 _state.value = state.value.copy(
                     exception = ""

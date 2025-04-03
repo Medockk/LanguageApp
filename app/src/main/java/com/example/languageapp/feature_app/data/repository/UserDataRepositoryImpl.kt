@@ -40,27 +40,34 @@ class UserDataRepositoryImpl(
         val userID = userDataDao.getUserData()?.userID ?: getUserId()
 
         return flow<NetworkResult<List<UserDataModel>>> {
+
             emit(NetworkResult.Loading())
 
             val remoteUserPositionDate = client.postgrest["Users"].select {
                 filter { eq("userID", userID) }
             }.decodeSingle<UserDataModelEntity>()
+
+            emit(NetworkResult.Success(listOf(remoteUserPositionDate)))
+
             val topUsers = client.postgrest["Users"].select {
-                limit(3)
+                limit(2)
                 filter {
-                    gt("score", remoteUserPositionDate.score)
-                    gte("score", remoteUserPositionDate.score)
+                    gt("score", remoteUserPositionDate.score.toInt())
                 }
             }.decodeList<UserDataModelEntity>()
 
-            val topList = ArrayList<UserDataModel>()
-            for (i in 0 until if (topUsers.size > 3) 3 else topUsers.size) {
-                topList.add(topUsers[i])
-            }
-            topList.add(remoteUserPositionDate)
+            emit(NetworkResult.Success(topUsers))
+
+            val notTopUsers = client.postgrest["Users"].select {
+                limit(1)
+                filter {
+                    lte("score", remoteUserPositionDate.score.toInt())
+                }
+            }.decodeList<UserDataModelEntity>()
+
+            emit(NetworkResult.Success(notTopUsers))
 
 
-            emit(NetworkResult.Success(topList))
             userDataDao.upsertData(remoteUserPositionDate)
 
         }.catch {
