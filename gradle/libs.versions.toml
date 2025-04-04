@@ -9,6 +9,8 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
 
+widjetGlance = "1.1.1"
+
 serializable = "2.0.0"
 serialization = "1.7.3"
 
@@ -23,6 +25,7 @@ viewModel = "2.8.7"
 supabase = "3.0.3"
 ktor = "3.0.3"
 tensorLite = "1.9.0"
+yandexSpeech = "2.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,9 +42,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-
 #navigation
 navigation = {module = "androidx.navigation:navigation-compose", version.ref = "navigation"}
+
+#widjet
+widjet-glance = {module = "androidx.glance:glance-appwidget", version.ref = "widjetGlance"}
 
 #viewModel
 view-model = {module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewModel"}
@@ -70,6 +75,7 @@ hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.re
 
 #tensor-lite
 tensor-lite = {module = "org.tensorflow:tensorflow-lite", version.ref = "tensorLite"}
+yandex-speech = {module = "com.yandex.android:speechkit", version.ref = "yandexSpeech"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

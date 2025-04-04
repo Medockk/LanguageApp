@@ -49,11 +49,39 @@ class OnBoardViewModel @Inject constructor(
                             )
                         }
                     }
+                }else{
+                    viewModelScope.launch(Dispatchers.IO) {
+                        try {
+                            setQueueUseCase(-1)
+                            _state.value = state.value.copy(
+                                isComplete = true
+                            )
+                        } catch (e: Exception) {
+                            _state.value = state.value.copy(exception = e.message.toString())
+                        }
+                    }
                 }
             }
 
             OnBoardEvent.ResetException -> {
                 _state.value = state.value.copy(exception = "")
+            }
+
+            OnBoardEvent.SkipOnBoardClick -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    try {
+                        setQueueUseCase(-1)
+                        _state.value = state.value.copy(isComplete = true)
+                    } catch (e: Exception) {
+                        _state.value = state.value.copy(
+                            exception = e.message.toString()
+                        )
+                    }
+                }
+            }
+
+            is OnBoardEvent.SetQueueList -> {
+                _state.value = state.value.copy(list = event.list)
             }
         }
     }

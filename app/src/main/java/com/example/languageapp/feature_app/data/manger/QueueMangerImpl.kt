@@ -11,11 +11,11 @@ class QueueMangerImpl(
     private val key = "KEY"
     private val sp = context.getSharedPreferences(key, Context.MODE_PRIVATE)
 
-    override suspend fun setQueue(queue: Int) {
+    override fun setQueue(queue: Int) {
         sp.edit { clear().putInt(key, queue) }
     }
 
-    override suspend fun getQueue(): Int {
+    override fun getQueue(): Int {
         return sp.getInt(key, 0)
     }
 }

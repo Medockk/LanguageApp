@@ -6,7 +6,7 @@ class SetQueueUseCase(
     private val queueManger: QueueManger
 ) {
 
-    suspend operator fun invoke(queue: Int){
+    operator fun invoke(queue: Int){
         queueManger.setQueue(queue)
     }
 }

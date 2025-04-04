@@ -42,6 +42,13 @@ android {
     buildFeatures {
         compose = true
     }
+    sourceSets {
+        getByName("main") {
+            assets {
+                srcDirs("src\\main\\assets", "src\\main\\assets")
+            }
+        }
+    }
     androidResources {
         noCompress.add("tflite")
     }
@@ -78,7 +85,10 @@ dependencies {
 
     //tensorLite
     implementation(libs.tensor.lite)
+    //implementation(libs.yandex.speech)
 
+    //widjet
+    implementation(libs.widjet.glance)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
