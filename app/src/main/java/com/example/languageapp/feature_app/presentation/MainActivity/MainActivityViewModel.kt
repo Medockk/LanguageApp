@@ -7,6 +7,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.domain.usecase.TestCore.GetTestCoreByIdUseCase
+import com.example.core.domain.usecase.TestCore.PostTestUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserConfigUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.GetUserDataUseCase
 import com.example.languageapp.feature_app.domain.use_case.UserData.UpsertUserConfigUseCase
@@ -24,24 +26,64 @@ class MainActivityViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val getUserConfigUseCase: GetUserConfigUseCase,
     private val upsertUserConfigUseCase: UpsertUserConfigUseCase,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val getTestCoreByIdUseCase: GetTestCoreByIdUseCase,
+    private val postTestUseCase: PostTestUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(MainActivityState())
     val state: State<MainActivityState> = _state
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            getUserData()
-            getUserConfig()
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                checkConnection()
-            } catch (_: Exception) {
 
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                postTestUseCase()
+                Log.e("test", "test")
+            } catch (e: Exception) {
+                Log.e("ex", e.message.toString())
             }
         }
+
+//        viewModelScope.launch(Dispatchers.IO) {
+//            getUserData()
+//            getUserConfig()
+//
+//
+//            val t = OkHttpClient()
+//            val r = Request.Builder().url("wss://echo.websocket.org").build()
+//            val l = object : WebSocketListener() {
+//                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+//                    super.onClosed(webSocket, code, reason)
+//                    Log.e("web", "closed")
+//                }
+//
+//                override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+//                    super.onFailure(webSocket, t, response)
+//                    Log.e("web", "failure")
+//                }
+//
+//                override fun onMessage(webSocket: WebSocket, text: String) {
+//                    super.onMessage(webSocket, text)
+//                    Log.e("web", "message $text")
+//                }
+//
+//                override fun onOpen(webSocket: WebSocket, response: Response) {
+//                    super.onOpen(webSocket, response)
+//                    Log.e("web", "open")
+//                }
+//            }
+//            val ws = t.newWebSocket(r, l)
+//            ws.send("qwertyui")
+//            t.dispatcher.executorService.shutdown()
+//        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                checkConnection()
+//            } catch (_: Exception) {
+//
+//            }
+//        }
     }
 
     private suspend fun checkConnection() {

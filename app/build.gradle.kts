@@ -55,6 +55,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
     //supabase
     implementation(libs.supabase.auth)
     implementation(libs.supabase.postgrest)
@@ -85,7 +86,10 @@ dependencies {
 
     //tensorLite
     implementation(libs.tensor.lite)
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
     //implementation(libs.yandex.speech)
+    implementation ("org.tensorflow:tensorflow-lite-support:0.4.0")
+    implementation ("com.google.code.gson:gson:2.8.9")
 
     //widjet
     implementation(libs.widjet.glance)

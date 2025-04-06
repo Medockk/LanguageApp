@@ -20,6 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.languageapp.SpeechRecognitionApp
+import com.example.languageapp.SpeechRecognizer
+import com.example.languageapp.TensorFlowLiteApp
 import com.example.languageapp.feature_app.presentation.Animals.AnimalsScreen
 import com.example.languageapp.feature_app.presentation.LanguageSelect.LanguageSelectScreen
 import com.example.languageapp.feature_app.presentation.Listening.ListeningScreen
@@ -89,67 +92,68 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = false,
                 darkTheme = state.isSystemInDarkTheme
             ) {
-                Scaffold {
-                    NavHost(
-                        navController,
-                        startDestination = Route.SplashScreen.route,
-                        enterTransition = {
-                            fadeIn(tween(750, easing = LinearOutSlowInEasing))
-                        },
-                        exitTransition = {
-                            fadeOut(tween(750, easing = LinearOutSlowInEasing))
-                        },
-                        modifier = Modifier
-                            .padding(it)
-                    ) {
-                        composable(Route.SplashScreen.route) {
-                            SplashScreen(navController)
-                        }
-                        composable(Route.OnBoardScreen.route) {
-                            OnBoardScreen(navController)
-                        }
-                        composable(Route.LoginScreen.route) {
-                            LoginScreen(navController)
-                        }
-                        composable(Route.SignUpScreen.route) {
-                            SignUpScreen(navController)
-                        }
-                        composable(Route.NoConnectionScreen.route) {
-                            NoConnectionScreen(navController)
-                        }
-                        composable(Route.LanguageSelectScreen.route) {
-                            LanguageSelectScreen(navController)
-                        }
-                        composable(Route.MainScreen.route) {
-                            MainScreen(navController)
-                        }
-                        composable(Route.ProfileScreen.route) {
-                            ProfileScreen(
-                                navController,
-                                isSystemInDarkTheme = state.isSystemInDarkTheme
-                            ) {
-                                viewModel.onEvent(
-                                    MainActivityEvent.ChangeSystemTheme(
-                                        !state.isSystemInDarkTheme
-                                    )
-                                )
-                                state.isSystemInDarkTheme
-                            }
-                        }
-                        composable(Route.ProfileResizePhotoScreen.route) {
-                            ProfileResizePhotoScreen(navController)
-                        }
-                        composable(Route.WordPractice.route) {
-                            WordPracticeScreen(navController)
-                        }
-                        composable(Route.Animals.route) {
-                            AnimalsScreen(navController)
-                        }
-                        composable(Route.Listening.route) {
-                            ListeningScreen(navController)
-                        }
-                    }
-                }
+                SpeechRecognitionApp()
+//                Scaffold {
+//                    NavHost(
+//                        navController,
+//                        startDestination = Route.SplashScreen.route,
+//                        enterTransition = {
+//                            fadeIn(tween(750, easing = LinearOutSlowInEasing))
+//                        },
+//                        exitTransition = {
+//                            fadeOut(tween(750, easing = LinearOutSlowInEasing))
+//                        },
+//                        modifier = Modifier
+//                            .padding(it)
+//                    ) {
+//                        composable(Route.SplashScreen.route) {
+//                            SplashScreen(navController)
+//                        }
+//                        composable(Route.OnBoardScreen.route) {
+//                            OnBoardScreen(navController)
+//                        }
+//                        composable(Route.LoginScreen.route) {
+//                            LoginScreen(navController)
+//                        }
+//                        composable(Route.SignUpScreen.route) {
+//                            SignUpScreen(navController)
+//                        }
+//                        composable(Route.NoConnectionScreen.route) {
+//                            NoConnectionScreen(navController)
+//                        }
+//                        composable(Route.LanguageSelectScreen.route) {
+//                            LanguageSelectScreen(navController)
+//                        }
+//                        composable(Route.MainScreen.route) {
+//                            MainScreen(navController)
+//                        }
+//                        composable(Route.ProfileScreen.route) {
+//                            ProfileScreen(
+//                                navController,
+//                                isSystemInDarkTheme = state.isSystemInDarkTheme
+//                            ) {
+//                                viewModel.onEvent(
+//                                    MainActivityEvent.ChangeSystemTheme(
+//                                        !state.isSystemInDarkTheme
+//                                    )
+//                                )
+//                                state.isSystemInDarkTheme
+//                            }
+//                        }
+//                        composable(Route.ProfileResizePhotoScreen.route) {
+//                            ProfileResizePhotoScreen(navController)
+//                        }
+//                        composable(Route.WordPractice.route) {
+//                            WordPracticeScreen(navController)
+//                        }
+//                        composable(Route.Animals.route) {
+//                            AnimalsScreen(navController)
+//                        }
+//                        composable(Route.Listening.route) {
+//                            ListeningScreen(navController)
+//                        }
+//                    }
+//                }
             }
         }
     }

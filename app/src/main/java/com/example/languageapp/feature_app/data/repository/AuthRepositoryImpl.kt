@@ -12,6 +12,7 @@ class AuthRepositoryImpl(
     private val userDataDao: UserDataDao
 ) : AuthRepository {
 
+
     override suspend fun signIn(mail: String, password: String) {
         client.auth.signInWith(Email) {
             this.email = mail

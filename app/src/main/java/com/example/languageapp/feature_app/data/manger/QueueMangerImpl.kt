@@ -1,8 +1,8 @@
 package com.example.languageapp.feature_app.data.manger
 
 import android.content.Context
-import com.example.languageapp.feature_app.domain.manger.QueueManger
 import androidx.core.content.edit
+import com.example.languageapp.feature_app.domain.manger.QueueManger
 
 class QueueMangerImpl(
     context: Context

@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.domain.usecase.TestCore.IsStrongPasswordUseCase
 import com.example.languageapp.feature_app.domain.use_case.Auth.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val isStrongPasswordUseCase: IsStrongPasswordUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(SignUpState())
@@ -88,7 +90,7 @@ class SignUpViewModel @Inject constructor(
                     _state.value.password.isNotBlank() &&
                     _state.value.password.length >= 8 &&
                     _state.value.password == _state.value.confirmPassword &&
-                    isStrongPassword(_state.value.password) &&
+                    isStrongPasswordUseCase(_state.value.password) &&
                     _state.value.firstName.isNotBlank() &&
                     _state.value.lastName.isNotBlank() &&
                     _state.value.isChecked
@@ -131,7 +133,7 @@ class SignUpViewModel @Inject constructor(
                         exception = "password not equals"
                     )
                 } else if (
-                    !isStrongPassword(_state.value.password)
+                    !isStrongPasswordUseCase(_state.value.password)
                 ) {
                     _state.value = state.value.copy(
                         exception = "password not strong"
@@ -180,20 +182,5 @@ class SignUpViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-
-    private fun isStrongPassword(password: String): Boolean {
-        var isDigit = false
-        var isUpperCase = false
-        var isLowerCase = false
-
-        password.forEach {
-            if (it.isDigit()) isDigit = true
-            if (it.isLowerCase()) isLowerCase = true
-            if (it.isUpperCase()) isUpperCase = true
-        }
-
-        return isDigit && isLowerCase && isUpperCase
     }
 }

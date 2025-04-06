@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -31,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +47,7 @@ import com.example.languageapp.feature_app.presentation.common.CustomIndicator
 import com.example.languageapp.feature_app.presentation.common.CustomScaffold
 import com.example.languageapp.feature_app.presentation.ui.theme.fontFredokaMedium
 import com.example.languageapp.feature_app.presentation.ui.theme.resizePhotoBackground
+import kotlin.math.abs
 
 @Composable
 fun ProfileResizePhotoScreen(
@@ -95,18 +95,16 @@ fun ProfileResizePhotoScreen(
             )
             Spacer(Modifier.weight(1f))
 
-            val t = remember { mutableStateOf(Offset(0f, 0f)) }
+            val offset = remember { mutableStateOf(Offset(0f, 0f)) }
+            val density = LocalDensity.current
+            val context = LocalContext.current
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.4f)
-                    .border(1.dp, Color.LightGray)
-                    .onGloballyPositioned {
-                        t.value = Offset(it.size.width / 2f, it.size.height / 2f)
-                    },
+                    .border(1.dp, Color.LightGray),
                 contentAlignment = Alignment.Center
             ) {
-                val dentity = LocalDensity.current
                 if (state.photoBitmap != null) {
                     Image(
                         bitmap = state.photoBitmap.asImageBitmap(),
@@ -114,6 +112,25 @@ fun ProfileResizePhotoScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
+                            .offset(
+                                with(density) {
+                                    (offset.value.x).toDp()
+                                },
+                                with(density) {
+                                    (offset.value.y).toDp()
+                                },
+                            )
+                            .pointerInput(Unit) {
+                                detectDragGestures { _, dragAmount ->
+                                    if (
+                                        size.width > dragAmount.x &&
+                                        size.height > dragAmount.y &&
+                                        0f < abs(dragAmount.y)
+                                    ){
+                                        offset.value += dragAmount
+                                    }
+                                }
+                            }
                     )
                     Box(
                         modifier = Modifier
@@ -126,37 +143,17 @@ fun ProfileResizePhotoScreen(
                                             Color.Transparent,
                                             resizePhotoBackground.copy(0.999f)
                                         ),
-                                        center = t.value,
                                     ),
                                     size = size,
                                 )
                             }
-                            .pointerInput(Unit) {
-                                detectDragGestures { change, dragAmount ->
-                                    t.value += dragAmount
-                                }
-                            }
                             .clip(CircleShape)
                     )
                 }
-
-                val canvasOffset = remember { mutableStateOf(Offset(0f, 0f)) }
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .fillMaxHeight()
-                        .onGloballyPositioned {
-                            canvasOffset.value =
-                                Offset(it.size.width.toFloat(), it.size.height.toFloat())
-                        }
-                        .offset(
-                            with(dentity) {
-                                (t.value.x - (canvasOffset.value.x)).toDp()
-                            },
-                            with(dentity) {
-                                (t.value.y - (canvasOffset.value.y / 2)).toDp()
-                            }
-                        )
                 ) {
                     drawLine(
                         Color.White,

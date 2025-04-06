@@ -126,7 +126,7 @@ class UserDataRepositoryImpl(
 
     override suspend fun getUserData(): Flow<NetworkResult<UserDataModel>> {
 
-        val userID = userDataDao.getUserData()?.userID ?: getUserId()
+        val userID = if (userDataDao.getUserData() == null) "null" else "kjhgf"
         return flow<NetworkResult<UserDataModel>> {
 
             emit(NetworkResult.Loading())
