@@ -66,7 +66,7 @@ class ImageClassifierTest(private val context: Context) {
     init {
         try {
             val options = ImageClassifier.ImageClassifierOptions.builder()
-                .setMaxResults(1) // Топ-5 результатов
+                .setMaxResults(10) // Топ-5 результатов
                 .build()
 
             classifier = ImageClassifier.createFromFileAndOptions(
@@ -91,6 +91,10 @@ class ImageClassifierTest(private val context: Context) {
         // Классификация
         return classifier?.classify(tensorImage)
     }
+}
+
+fun ByteArray.toBitmap() : Bitmap {
+    return BitmapFactory.decodeByteArray(this, 0, this.size)
 }
 
 fun module(context: Context) = ImageClassifier.createFromFileAndOptions(
@@ -137,6 +141,8 @@ fun TensorFlowLiteApp() {
             try {
                 val inputStream = context.contentResolver.openInputStream(uri)
                 coroutine.launch(Dispatchers.IO) {
+                    val stream = context.contentResolver.openInputStream(uri)
+                    bitmap = stream?.readBytes()?.toBitmap()
                     val t = BitmapFactory.decodeStream(
                         URL("https://3dnews.ru/assets/external/illustrations/2025/01/28/1117365/deepseek_01.jpg")
                             .openConnection().getInputStream()
@@ -144,9 +150,9 @@ fun TensorFlowLiteApp() {
                     Log.e("bit", "bit")
 
                     withContext(Dispatchers.Main) {
-                        bitmap = t
+                        //bitmap = t
                         // Классификация изображения
-                        t?.let { bmp ->
+                        bitmap?.let { bmp ->
                             val classifications = imageClassifier.classify(bmp)
                             resultText =
                                 classifications?.firstOrNull()?.categories?.joinToString("\n") {

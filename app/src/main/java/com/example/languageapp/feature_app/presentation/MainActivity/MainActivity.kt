@@ -1,6 +1,5 @@
 package com.example.languageapp.feature_app.presentation.MainActivity
 
-import android.content.res.AssetManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -21,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.languageapp.SpeechRecognitionApp
-import com.example.languageapp.SpeechRecognizer
 import com.example.languageapp.TensorFlowLiteApp
 import com.example.languageapp.feature_app.presentation.Animals.AnimalsScreen
 import com.example.languageapp.feature_app.presentation.LanguageSelect.LanguageSelectScreen
@@ -39,11 +37,12 @@ import com.example.languageapp.feature_app.presentation.WordPractice.WordPractic
 import com.example.languageapp.feature_app.presentation.ui.theme.LanguageAppTheme
 import com.example.languageapp.feature_app.presentation.ui.theme.primaryColor
 import dagger.hilt.android.AndroidEntryPoint
-import org.tensorflow.lite.Interpreter
-import java.io.FileInputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.channels.FileChannel
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import okio.ByteString
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -52,20 +51,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-
-            try {
-                val byteBuffer = getByteBuffer(this.assets, "model.tflite")
-                val interpreter = Interpreter(byteBuffer)
-
-                val output = ByteBuffer.allocateDirect(8)
-                output.order(ByteOrder.nativeOrder())
-                interpreter.run(floatArrayOf(17f, 100f), output)
-                output.rewind()
-
-                Log.e("tflite", output.getFloat().toString())
-            } catch (e: Exception) {
-                Log.e("tflite", e.message.toString())
-            }
+//            try {
+//                val byteBuffer = getByteBuffer(this.assets, "model.tflite")
+//                val interpreter = Interpreter(byteBuffer)
+//
+//                val output = ByteBuffer.allocateDirect(8)
+//                output.order(ByteOrder.nativeOrder())
+//                interpreter.run(floatArrayOf(17f, 100f), output)
+//                output.rewind()
+//
+//                Log.e("tflite", output.getFloat().toString())
+//            } catch (e: Exception) {
+//                Log.e("tflite", e.message.toString())
+//            }
 
             val viewModel: MainActivityViewModel = hiltViewModel()
             val state = viewModel.state.value
@@ -92,79 +90,79 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = false,
                 darkTheme = state.isSystemInDarkTheme
             ) {
-                SpeechRecognitionApp()
-//                Scaffold {
-//                    NavHost(
-//                        navController,
-//                        startDestination = Route.SplashScreen.route,
-//                        enterTransition = {
-//                            fadeIn(tween(750, easing = LinearOutSlowInEasing))
-//                        },
-//                        exitTransition = {
-//                            fadeOut(tween(750, easing = LinearOutSlowInEasing))
-//                        },
-//                        modifier = Modifier
-//                            .padding(it)
-//                    ) {
-//                        composable(Route.SplashScreen.route) {
-//                            SplashScreen(navController)
-//                        }
-//                        composable(Route.OnBoardScreen.route) {
-//                            OnBoardScreen(navController)
-//                        }
-//                        composable(Route.LoginScreen.route) {
-//                            LoginScreen(navController)
-//                        }
-//                        composable(Route.SignUpScreen.route) {
-//                            SignUpScreen(navController)
-//                        }
-//                        composable(Route.NoConnectionScreen.route) {
-//                            NoConnectionScreen(navController)
-//                        }
-//                        composable(Route.LanguageSelectScreen.route) {
-//                            LanguageSelectScreen(navController)
-//                        }
-//                        composable(Route.MainScreen.route) {
-//                            MainScreen(navController)
-//                        }
-//                        composable(Route.ProfileScreen.route) {
-//                            ProfileScreen(
-//                                navController,
-//                                isSystemInDarkTheme = state.isSystemInDarkTheme
-//                            ) {
-//                                viewModel.onEvent(
-//                                    MainActivityEvent.ChangeSystemTheme(
-//                                        !state.isSystemInDarkTheme
-//                                    )
-//                                )
-//                                state.isSystemInDarkTheme
-//                            }
-//                        }
-//                        composable(Route.ProfileResizePhotoScreen.route) {
-//                            ProfileResizePhotoScreen(navController)
-//                        }
-//                        composable(Route.WordPractice.route) {
-//                            WordPracticeScreen(navController)
-//                        }
-//                        composable(Route.Animals.route) {
-//                            AnimalsScreen(navController)
-//                        }
-//                        composable(Route.Listening.route) {
-//                            ListeningScreen(navController)
-//                        }
-//                    }
-//                }
+                //TensorFlowLiteApp()
+                Scaffold {
+                    NavHost(
+                        navController,
+                        startDestination = Route.SplashScreen.route,
+                        enterTransition = {
+                            fadeIn(tween(750, easing = LinearOutSlowInEasing))
+                        },
+                        exitTransition = {
+                            fadeOut(tween(750, easing = LinearOutSlowInEasing))
+                        },
+                        modifier = Modifier
+                            .padding(it)
+                    ) {
+                        composable(Route.SplashScreen.route) {
+                            SplashScreen(navController)
+                        }
+                        composable(Route.OnBoardScreen.route) {
+                            OnBoardScreen(navController)
+                        }
+                        composable(Route.LoginScreen.route) {
+                            LoginScreen(navController)
+                        }
+                        composable(Route.SignUpScreen.route) {
+                            SignUpScreen(navController)
+                        }
+                        composable(Route.NoConnectionScreen.route) {
+                            NoConnectionScreen(navController)
+                        }
+                        composable(Route.LanguageSelectScreen.route) {
+                            LanguageSelectScreen(navController)
+                        }
+                        composable(Route.MainScreen.route) {
+                            MainScreen(navController)
+                        }
+                        composable(Route.ProfileScreen.route) {
+                            ProfileScreen(
+                                navController,
+                                isSystemInDarkTheme = state.isSystemInDarkTheme
+                            ) {
+                                viewModel.onEvent(
+                                    MainActivityEvent.ChangeSystemTheme(
+                                        !state.isSystemInDarkTheme
+                                    )
+                                )
+                                state.isSystemInDarkTheme
+                            }
+                        }
+                        composable(Route.ProfileResizePhotoScreen.route) {
+                            ProfileResizePhotoScreen(navController)
+                        }
+                        composable(Route.WordPractice.route) {
+                            WordPracticeScreen(navController)
+                        }
+                        composable(Route.Animals.route) {
+                            AnimalsScreen(navController)
+                        }
+                        composable(Route.Listening.route) {
+                            ListeningScreen(navController)
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun getByteBuffer(assetManager: AssetManager, path: String): ByteBuffer {
-        val fd = assetManager.openFd(path)
-        val inputStream = FileInputStream(fd.fileDescriptor)
-        val channel = inputStream.channel
-        val startOffset = fd.startOffset
-        val declaredLength = fd.declaredLength
-
-        return channel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-    }
+//    private fun getByteBuffer(assetManager: AssetManager, path: String): ByteBuffer {
+//        val fd = assetManager.openFd(path)
+//        val inputStream = FileInputStream(fd.fileDescriptor)
+//        val channel = inputStream.channel
+//        val startOffset = fd.startOffset
+//        val declaredLength = fd.declaredLength
+//
+//        return channel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+//    }
 }
